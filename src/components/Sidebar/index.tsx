@@ -1,6 +1,4 @@
 import React from 'react';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import MenuIcon from '@material-ui/icons/Menu';
 import Link from 'next/link';
 import { useTheme } from '@material-ui/core/styles';
@@ -13,13 +11,14 @@ import {
 	IconButton,
 	List,
 	ListItem,
-	ListItemIcon,
 	ListItemText,
 	CssBaseline,
 	AppBar,
 	SwipeableDrawer,
 	Typography,
 } from '@material-ui/core';
+import Image from 'next/image';
+import { KeyboardArrowDownRounded } from '@material-ui/icons';
 
 interface Props {
 	/**
@@ -42,8 +41,14 @@ export default function ResponsiveDrawer(props: Props) {
 
 	const drawer = (
 		<div>
-			<div className={classes.toolbar}>
-				<h1>Hello</h1>
+			<div className={`${classes.toolbar} mx-auto d-flex`}>
+				<Image
+					height='91'
+					width='241'
+					src='/images/logo.webp'
+					alt='Conceptometry Logo'
+					className='d-flex mx-auto'
+				/>
 			</div>
 			<Divider />
 			<List>
@@ -55,25 +60,38 @@ export default function ResponsiveDrawer(props: Props) {
 						<ListItemText primary={'Home'} />
 					</ListItem>
 				</Link>
-				<Link href='/hello'>
-					<ListItem button key={'Hello'}>
+				<Link href='/assignments'>
+					<ListItem button key={'Assignments'}>
 						{/* <ListItemIcon>
 						{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
 					</ListItemIcon> */}
-						<ListItemText primary={'Hello'} />
+						<ListItemText primary={'Assignments'} />
 					</ListItem>
 				</Link>
-			</List>
-			<Divider />
-			<List>
-				{['All mail', 'Trash', 'Spam'].map((text, index) => (
-					<ListItem button key={text}>
-						<ListItemIcon>
-							{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-						</ListItemIcon>
-						<ListItemText primary={text} />
+				<Link href='/lectures'>
+					<ListItem button key={'Lectures'}>
+						{/* <ListItemIcon>
+						{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+					</ListItemIcon> */}
+						<ListItemText primary={'Lectures'} />
 					</ListItem>
-				))}
+				</Link>
+				<Link href='/students'>
+					<ListItem button key={'Students'}>
+						{/* <ListItemIcon>
+						{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+					</ListItemIcon> */}
+						<ListItemText primary={'Students'} />
+					</ListItem>
+				</Link>
+				<Link href='/profile'>
+					<ListItem button key={'Profile'}>
+						{/* <ListItemIcon>
+						{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+					</ListItemIcon> */}
+						<ListItemText primary={'Profile'} />
+					</ListItem>
+				</Link>
 			</List>
 		</div>
 	);
@@ -84,23 +102,36 @@ export default function ResponsiveDrawer(props: Props) {
 	return (
 		<div className={classes.root}>
 			<CssBaseline />
-			<AppBar position='fixed' className={classes.appBar}>
-				<Toolbar>
-					<IconButton
-						color='inherit'
-						aria-label='open drawer'
-						edge='start'
-						onClick={handleDrawerToggle}
-						className={classes.menuButton}
-					>
-						<MenuIcon />
-					</IconButton>
-					<Typography variant='h6' noWrap>
-						Conceptometry
-					</Typography>
+			<AppBar
+				position='fixed'
+				className={`${classes.appBar} bg-gradient d-flex`}
+			>
+				<Toolbar className='d-flex justify-content-between my-auto'>
+					<div className='d-flex my-auto '>
+						<IconButton
+							color='inherit'
+							aria-label='open drawer'
+							edge='start'
+							onClick={handleDrawerToggle}
+							className={classes.menuButton}
+						>
+							<MenuIcon />
+						</IconButton>
+						<Typography
+							variant='h5'
+							className={`${classes.appBarTitle} d-flex my-auto`}
+							style={{ fontWeight: 600 }}
+							noWrap
+						>
+							Conceptometry
+						</Typography>
+					</div>
+					<div style={{ fontSize: 16 }} className='d-none d-md-flex my-auto'>
+						Hello Kamaldeep <KeyboardArrowDownRounded />
+					</div>
 				</Toolbar>
 			</AppBar>
-			<nav className={classes.drawer} aria-label='mailbox folders'>
+			<nav className={`${classes.drawer} drawer`}>
 				{/* The implementation can be swapped with js to avoid SEO duplication of links. */}
 				<Hidden smUp implementation='css'>
 					<SwipeableDrawer
