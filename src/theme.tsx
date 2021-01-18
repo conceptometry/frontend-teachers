@@ -8,10 +8,10 @@ let drawerWidth: number = 240;
 const theme = createMuiTheme({
 	palette: {
 		primary: {
-			main: '#556cd6',
+			main: '#0D6EFD',
 		},
 		secondary: {
-			main: '#19857b',
+			main: '#6e00ff',
 		},
 		error: {
 			main: red.A400,

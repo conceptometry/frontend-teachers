@@ -5,6 +5,8 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import styles from './InfoTabs.module.css';
+import { useTheme } from '@material-ui/core/styles';
+import AssignmentsTab from './AssignmentsTab';
 
 interface TabPanelProps {
 	children?: React.ReactNode;
@@ -39,8 +41,9 @@ function a11yProps(index: any) {
 	};
 }
 
-export default function HomeInfoTabs() {
+export default function HomeInfoTabs({ assignmentData }) {
 	const [value, setValue] = React.useState(0);
+	const theme = useTheme();
 
 	const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
 		setValue(newValue);
@@ -52,11 +55,15 @@ export default function HomeInfoTabs() {
 				<Tabs
 					value={value}
 					onChange={handleChange}
-					indicatorColor='primary'
-					textColor='primary'
+					TabIndicatorProps={{
+						style: {
+							backgroundColor: '#0D6EFD',
+						},
+					}}
+					textColor='inherit'
 					variant='scrollable'
 					scrollButtons='auto'
-					aria-label='scrollable auto tabs example'
+					aria-label='Tabs to check leads assignments lectures students'
 					className={styles.tabsRow}
 				>
 					<Tab style={{ outline: 'none' }} label='Leads' {...a11yProps(0)} />
@@ -69,11 +76,9 @@ export default function HomeInfoTabs() {
 					<Tab style={{ outline: 'none' }} label='Students' {...a11yProps(3)} />
 				</Tabs>
 			</AppBar>
-			<TabPanel value={value} index={0}>
-				Item One
-			</TabPanel>
+			<TabPanel value={value} index={0}></TabPanel>
 			<TabPanel value={value} index={1}>
-				Item Two
+				<AssignmentsTab data={assignmentData} />
 			</TabPanel>
 			<TabPanel value={value} index={2}>
 				Item Three
