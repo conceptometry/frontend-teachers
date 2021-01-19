@@ -106,7 +106,9 @@ export default function Home({
 				<link rel='icon' href='/favicon.ico' />
 			</Head>
 			<Sidebar>
-				{assignmentData.success === true ? (
+				{assignmentData.success === true ||
+				lectureData.success === true ||
+				studentData.success === true ? (
 					<>
 						<div
 							className='bg-lightpurple px-3 py-2 text-black text-center'

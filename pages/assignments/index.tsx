@@ -1,0 +1,118 @@
+import Sidebar from '../../src/components/Sidebar';
+import { useRouter } from 'next/router';
+import Head from 'next/head';
+import Link from 'next/link';
+import AssignmentList from '../../src/components/lists/AssignmentList';
+import { List } from '@material-ui/core';
+
+export const getServerSideProps = async ({ query }) => {
+	const page = query.page;
+	const token =
+		'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmY2NiZTVlZTliZTRiMWNiNDk0ZWU2MyIsImlhdCI6MTYxMTAzMDg3NCwiZXhwIjoxNjEzNjIyODc0fQ.cWJgfAc6aYFOB5_W1DOSPvvXVmdcXzNe8aFEz91aPU0';
+	const url = `${process.env.API_URI}/assignments?page=${page || 1}&limit=2`;
+	const options = {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+			authorization: `Bearer ${token}`,
+		},
+	};
+
+	const res = await fetch(url, options);
+
+	let data;
+	if (!res.ok) {
+		const message = `An error has occured: ${res.status}`;
+		data = {
+			success: false,
+			message: message,
+			status: res.status,
+		};
+	} else {
+		data = await res.json();
+	}
+
+	return { props: { data } };
+};
+
+const Assignments = ({ data }) => {
+	const router = useRouter();
+	const { page } = router.query;
+	return (
+		<>
+			<Head>
+				<title>Conceptometry | Assignments</title>
+			</Head>
+			<Sidebar>
+				{data.success === true ? (
+					<>
+						<h2 className='text-center my-2'>Assignments</h2>
+						<List>
+							{data.message.map((a) => (
+								<AssignmentList
+									key={a.id}
+									id={a.id}
+									dueDate={a.dueDate}
+									name={a.name}
+									style={false}
+								/>
+							))}
+						</List>
+						<div className='d-flex mx-1'>
+							{+page > 1 && (
+								<Link href={`/assignments?page=${(+page || 1) - 1}`}>
+									<a
+										className='btn btn-light border border-1 border-primary bg-gradient mx-1'
+										style={{ width: '100%' }}
+									>
+										Previous Page
+									</a>
+								</Link>
+							)}
+							{data.pages > (page || 1) && (
+								<Link href={`/assignments?page=${(+page || 1) + 1}`}>
+									<a
+										className='btn btn-light border border-1 border-primary bg-gradient mx-1'
+										style={{ width: '100%' }}
+									>
+										Next Page
+									</a>
+								</Link>
+							)}
+						</div>
+						<div className='d-flex mx-1 mt-1'>
+							<button
+								type='button'
+								className='btn btn-light bg-gradient border border-primary mx-1 w-100 shadow-sm'
+							>
+								Total Pages{' '}
+								<span
+									className='badge bg-secondary'
+									style={{ fontWeight: 500 }}
+								>
+									{data.pages || 0}
+								</span>
+							</button>
+							<button
+								type='button'
+								className='btn btn-light bg-gradient border border-primary mx-1 w-100 shadow-sm'
+							>
+								Current Page{' '}
+								<span
+									className='badge bg-secondary'
+									style={{ fontWeight: 500 }}
+								>
+									{page || 1}
+								</span>
+							</button>
+						</div>
+					</>
+				) : (
+					<p className='m-3'>{data.message}</p>
+				)}
+			</Sidebar>
+		</>
+	);
+};
+
+export default Assignments;
