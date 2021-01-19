@@ -2,31 +2,31 @@ import { Button, List } from '@material-ui/core';
 import { NavigateNextRounded } from '@material-ui/icons';
 import styles from './InfoTabs.module.css';
 import Link from 'next/link';
-import AssignmentList from '../lists/AssignmentList';
+import LecturesList from '../lists/LecturesList';
 
-const AssignmentsTab = ({ data }) => {
+const LecturesTab = ({ data }) => {
 	return (
 		<>
 			{data.count === 0 ? (
 				<>
-					<p>You have made no assignments till now...</p>
+					<p>You have made no lectures yet...</p>
 				</>
 			) : (
 				<>
 					<List dense={true} className={styles.listContainer}>
 						{data.message.map((a) => (
-							<AssignmentList
+							<LecturesList
 								key={a.id}
 								id={a.id}
 								name={a.name}
-								dueDate={a.dueDate}
 								style={true}
+								date={a.eventTime}
 							/>
 						))}
 					</List>
 
 					<div className='d-flex'>
-						<Link href='/page'>
+						<Link href='/lectures/page/1'>
 							<Button
 								variant='outlined'
 								style={{ marginLeft: 'auto', marginRight: 'auto' }}
@@ -42,4 +42,4 @@ const AssignmentsTab = ({ data }) => {
 	);
 };
 
-export default AssignmentsTab;
+export default LecturesTab;

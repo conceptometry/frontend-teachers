@@ -7,6 +7,8 @@ import Box from '@material-ui/core/Box';
 import styles from './InfoTabs.module.css';
 import { useTheme } from '@material-ui/core/styles';
 import AssignmentsTab from './AssignmentsTab';
+import LecturesTab from './LecturesTab';
+import StudentsTab from './StudentsTab';
 
 interface TabPanelProps {
 	children?: React.ReactNode;
@@ -41,7 +43,11 @@ function a11yProps(index: any) {
 	};
 }
 
-export default function HomeInfoTabs({ assignmentData }) {
+export default function HomeInfoTabs({
+	assignmentData,
+	lectureData,
+	studentData,
+}) {
 	const [value, setValue] = React.useState(0);
 	const theme = useTheme();
 
@@ -76,15 +82,17 @@ export default function HomeInfoTabs({ assignmentData }) {
 					<Tab style={{ outline: 'none' }} label='Students' {...a11yProps(3)} />
 				</Tabs>
 			</AppBar>
-			<TabPanel value={value} index={0}></TabPanel>
+			<TabPanel value={value} index={0}>
+				<p>You have no leads yet...</p>
+			</TabPanel>
 			<TabPanel value={value} index={1}>
 				<AssignmentsTab data={assignmentData} />
 			</TabPanel>
 			<TabPanel value={value} index={2}>
-				Item Three
+				<LecturesTab data={lectureData} />
 			</TabPanel>
 			<TabPanel value={value} index={3}>
-				Item Four
+				<StudentsTab data={studentData} />
 			</TabPanel>
 		</div>
 	);

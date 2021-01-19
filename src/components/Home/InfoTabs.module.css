@@ -3,15 +3,21 @@
 }
 
 .muiBtnBlue {
-	transition: all 0.5s ease-out !important;
+	-webkit-transition: all 500ms ease;
+	-ms-transition: all 500ms ease;
+	transition: all 500ms ease;
+	-o-transition: all 0.2s linear;
 	outline: none !important;
 	border: none !important;
 	border-radius: 7px !important;
 	box-shadow: 2px 2px 7px rgba(0, 0, 0, 0.25) !important;
+	background: #fff;
 }
 
 .muiBtnBlue:hover {
-	transition: all 0.2s ease-out;
+	-webkit-transition: all 500ms ease;
+	-ms-transition: all 500ms ease;
+	transition: all 500ms ease;
 	color: #fefefe;
 	background: linear-gradient(110deg, #2400ff, #cf2da2);
 }

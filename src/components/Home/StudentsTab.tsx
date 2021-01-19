@@ -2,24 +2,24 @@ import { Button, List } from '@material-ui/core';
 import { NavigateNextRounded } from '@material-ui/icons';
 import styles from './InfoTabs.module.css';
 import Link from 'next/link';
-import AssignmentList from '../lists/AssignmentList';
+import StudentList from '../lists/StudentList';
 
 const AssignmentsTab = ({ data }) => {
 	return (
 		<>
 			{data.count === 0 ? (
 				<>
-					<p>You have made no assignments till now...</p>
+					<p>You have no students yet...</p>
 				</>
 			) : (
 				<>
 					<List dense={true} className={styles.listContainer}>
 						{data.message.map((a) => (
-							<AssignmentList
+							<StudentList
 								key={a.id}
 								id={a.id}
 								name={a.name}
-								dueDate={a.dueDate}
+								grade={a.grade}
 								style={true}
 							/>
 						))}
