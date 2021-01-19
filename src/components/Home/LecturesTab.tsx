@@ -16,7 +16,7 @@ const LecturesTab = ({ data }) => {
 					<List dense={true} className={styles.listContainer}>
 						{data.message.map((a) => (
 							<LecturesList
-								key={a.id}
+								key={a._id}
 								id={a.id}
 								name={a.name}
 								style={true}

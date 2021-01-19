@@ -1,0 +1,126 @@
+import Sidebar from '../../src/components/Sidebar';
+import { useRouter } from 'next/router';
+import Head from 'next/head';
+import Link from 'next/link';
+import StudentList from '../../src/components/lists/StudentList';
+import { List } from '@material-ui/core';
+
+export const getServerSideProps = async ({ query }) => {
+	const page = query.page;
+	const token =
+		'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmY2NiZTVlZTliZTRiMWNiNDk0ZWU2MyIsImlhdCI6MTYxMTAzMDg3NCwiZXhwIjoxNjEzNjIyODc0fQ.cWJgfAc6aYFOB5_W1DOSPvvXVmdcXzNe8aFEz91aPU0';
+	const url = `${process.env.API_URI}/users/student?page=${page || 1}&limit=6`;
+	const options = {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+			authorization: `Bearer ${token}`,
+		},
+	};
+
+	const res = await fetch(url, options);
+
+	let data;
+	if (!res.ok) {
+		const message = `An error has occured: ${res.status}`;
+		data = {
+			success: false,
+			message: message,
+			status: res.status,
+		};
+	} else {
+		data = await res.json();
+	}
+
+	return { props: { data } };
+};
+
+const Students = ({ data }) => {
+	const router = useRouter();
+	const { page } = router.query;
+	return (
+		<>
+			<Head>
+				<title>Conceptometry | Students</title>
+			</Head>
+			<Sidebar>
+				<h2 className='text-center my-2'>Students</h2>
+				{data.count === 0 ? (
+					<>
+						<p className='m-3'>You have no students yet...</p>
+					</>
+				) : (
+					<>
+						{data.success === true ? (
+							<>
+								<List>
+									{data.message.map((a) => (
+										<StudentList
+											key={a._id}
+											id={a.id}
+											grade={a.grade}
+											name={a.name}
+											style={false}
+										/>
+									))}
+								</List>
+								<div className='d-flex mx-1'>
+									{+page > 1 && (
+										<Link href={`/students?page=${(+page || 1) - 1}`}>
+											<a
+												className='btn btn-light border border-1 border-primary bg-gradient mx-1'
+												style={{ width: '100%' }}
+											>
+												Previous Page
+											</a>
+										</Link>
+									)}
+									{data.pages > (page || 1) && (
+										<Link href={`/students?page=${(+page || 1) + 1}`}>
+											<a
+												className='btn btn-light border border-1 border-primary bg-gradient mx-1'
+												style={{ width: '100%' }}
+											>
+												Next Page
+											</a>
+										</Link>
+									)}
+								</div>
+								<div className='d-flex mx-1 mt-1'>
+									<button
+										type='button'
+										className='btn btn-light bg-gradient border border-primary mx-1 w-100 shadow-sm'
+									>
+										Total Pages{' '}
+										<span
+											className='badge bg-secondary'
+											style={{ fontWeight: 500 }}
+										>
+											{data.pages || 0}
+										</span>
+									</button>
+									<button
+										type='button'
+										className='btn btn-light bg-gradient border border-primary mx-1 w-100 shadow-sm'
+									>
+										Current Page{' '}
+										<span
+											className='badge bg-secondary'
+											style={{ fontWeight: 500 }}
+										>
+											{page || 1}
+										</span>
+									</button>
+								</div>
+							</>
+						) : (
+							<p className='m-3'>{data.message}</p>
+						)}
+					</>
+				)}
+			</Sidebar>
+		</>
+	);
+};
+
+export default Students;
