@@ -7,6 +7,7 @@ import {
 	ListItemText,
 } from '@material-ui/core';
 import { Assignment, NavigateNextRounded } from '@material-ui/icons';
+import Link from 'next/link';
 import styles from '../Home/InfoTabs.module.css';
 
 interface Props {
@@ -43,13 +44,15 @@ const AssignmentList = ({ id, name, style, dueDate }: Props) => {
 					secondary={`Due Date - ${formattedDate}`}
 				/>
 				<ListItemSecondaryAction>
-					<IconButton
-						edge='end'
-						aria-label='view more'
-						className={styles.outlineNone}
-					>
-						<NavigateNextRounded />
-					</IconButton>
+					<Link href={`/assignments/${id}`}>
+						<IconButton
+							edge='end'
+							aria-label='view more'
+							className={styles.outlineNone}
+						>
+							<NavigateNextRounded />
+						</IconButton>
+					</Link>
 				</ListItemSecondaryAction>
 			</ListItem>
 		</>

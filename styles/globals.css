@@ -31,3 +31,8 @@ a {
 .bg-tint-orange {
 	background-color: #f8f1e2 !important;
 }
+
+.bg-infoblock {
+	background: linear-gradient(to top left, #f6f0ff, #f0f0f0) !important;
+	box-shadow: 2px 2px 6px rgba(104, 104, 104, 0.486) !important;
+}
