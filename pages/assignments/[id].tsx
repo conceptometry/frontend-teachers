@@ -37,14 +37,14 @@ const SingleAssignment = ({ data }) => {
 	const { id } = router.query;
 	const dueDate = new Date(data.message.dueDate);
 	const formattedDate =
-		dueDate.getDay() +
+		dueDate.getDate() +
 		'/' +
 		(dueDate.getMonth() + 1) +
 		'/' +
 		dueDate.getFullYear();
 	const createdAt = new Date(data.message.createdAt);
 	const formattedCreatedAt =
-		createdAt.getDay() +
+		createdAt.getDate() +
 		'/' +
 		(createdAt.getMonth() + 1) +
 		'/' +

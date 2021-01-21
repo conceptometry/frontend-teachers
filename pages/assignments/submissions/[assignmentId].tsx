@@ -69,7 +69,12 @@ const ViewSubmissionsByAssignment = ({ data, assignmentData }) => {
 					<>
 						<List dense={false} className='d-flex flex-column mx-4'>
 							{data.message.map((d) => (
-								<SubmissionList id={d._id} name={d.user.name} style={false} />
+								<SubmissionList
+									key={d._id}
+									id={d._id}
+									name={d.user.name}
+									style={false}
+								/>
 							))}
 						</List>
 					</>

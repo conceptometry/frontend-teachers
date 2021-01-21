@@ -22,7 +22,7 @@ const AssignmentList = ({ id, name, style, dueDate }: Props) => {
 	let ISODate = new Date(dueDate);
 	if (ISODate) {
 		formattedDate =
-			ISODate.getDay() +
+			ISODate.getDate() +
 			'/' +
 			(ISODate.getMonth() + 1) +
 			'/' +

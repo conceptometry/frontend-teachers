@@ -21,7 +21,7 @@ const LecturesList = ({ id, name, style, date }: Props) => {
 	let ISODate = new Date(date);
 	if (date) {
 		formattedDate =
-			ISODate.getDay() +
+			ISODate.getDate() +
 			'/' +
 			(ISODate.getMonth() + 1) +
 			'/' +
