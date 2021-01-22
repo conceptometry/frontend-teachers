@@ -3,7 +3,8 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Link from 'next/link';
 import AssignmentList from '../../src/components/lists/AssignmentList';
-import { List } from '@material-ui/core';
+import { IconButton, List } from '@material-ui/core';
+import { AddRounded } from '@material-ui/icons';
 
 export const getServerSideProps = async ({ query }) => {
 	const page = query.page;
@@ -46,6 +47,19 @@ const Assignments = ({ data }) => {
 			<Sidebar>
 				{data.success === true ? (
 					<>
+						<Link href='/assignments/add'>
+							<div
+								className='addAssignment position-fixed'
+								style={{ top: 72, right: 10 }}
+							>
+								<IconButton
+									className='outline-none'
+									style={{ border: '1px solid #111' }}
+								>
+									<AddRounded className='outline-none' />
+								</IconButton>
+							</div>
+						</Link>
 						<h2 className='text-center my-2'>Assignments</h2>
 						<List>
 							{data.message.map((a) => (

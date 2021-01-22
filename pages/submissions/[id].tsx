@@ -5,9 +5,6 @@ import {
 	Backdrop,
 	Fade,
 	TextField,
-	Select,
-	MenuItem,
-	InputLabel,
 } from '@material-ui/core';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
@@ -206,7 +203,7 @@ const SingleSubmission = ({ data }) => {
 							{data.message[0].marks && (
 								<InfoBlock
 									name={'Marks'}
-									info={JSON.stringify(data.message[0].marks)}
+									info={`${JSON.stringify(data.message[0].marks)}/10`}
 								/>
 							)}
 						</div>
