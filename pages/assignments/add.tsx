@@ -43,10 +43,12 @@ const addAssignment = ({ data }) => {
 	const [selectedValue, setSelectedValue] = useState([]);
 	const [name, setName] = useState('');
 	const [description, setDescription] = useState('');
+	const [dueDate, setDueDate] = useState('');
 
 	const formData = {
 		name,
 		description,
+		dueDate,
 		student: selectedValue,
 	};
 
@@ -74,34 +76,42 @@ const addAssignment = ({ data }) => {
 	const [response, setResponse] = useState('');
 	const submitForm = async (e) => {
 		e.preventDefault();
-		setSubmitting(true);
-		const url = `http://localhost:5000/api/v1/assignments`;
-		const options = {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				authorization: `Bearer ${token}`,
-			},
-			body: JSON.stringify(formData),
-		};
-		try {
-			const res = await fetch(url, options);
+		if (selectedValue.length === 0) {
+			setResponse('Please enter a valid value for the students');
+		} else {
+			setSubmitting(true);
+			const url = `http://localhost:5000/api/v1/assignments`;
+			const options = {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					authorization: `Bearer ${token}`,
+				},
+				body: JSON.stringify(formData),
+			};
+			try {
+				const res = await fetch(url, options);
 
-			const resJson = await res.json();
-			if (resJson.success === true) {
-				setResponse(resJson.message);
-				setSubmitting(false);
-			} else {
-				console.log(resJson.message);
-				const message = `${resJson.message}`;
+				const resJson = await res.json();
+				if (resJson.success === true) {
+					setResponse(resJson.message);
+					setSelectedValue([]);			
+					setName('');
+					setDueDate('');
+					setDescription('');
+					setSubmitting(false);
+				} else {
+					console.log(resJson.message);
+					const message = `${resJson.message}`;
+					setResponse(message);
+					setSubmitting(false);
+				}
+			} catch (e) {
+				console.log(e);
+				const message = `An error has occured: 50X`;
 				setResponse(message);
 				setSubmitting(false);
 			}
-		} catch (e) {
-			console.log(e);
-			const message = `An error has occured: 50X`;
-			setResponse(message);
-			setSubmitting(false);
 		}
 	};
 
@@ -142,6 +152,25 @@ const addAssignment = ({ data }) => {
 												onChange={handleChange}
 												required
 											/>
+
+											<div className='my-3 form-floating'>
+												<input
+													type='number'
+													name='dueDate'
+													id='dueDateField'
+													placeholder='Time for Assignment (in days)'
+													className='form-control w-100'
+													value={dueDate}
+													onChange={(e) => setDueDate(e.target.value)}
+													required
+												/>
+												<label htmlFor='dueDateField'>
+													Time for Assignment (in days)
+												</label>
+												<div className='invalid-feedback'>
+													Please provide a valid assignment time
+												</div>
+											</div>
 											<div className='my-3 form-floating'>
 												<input
 													type='text'

@@ -4,11 +4,12 @@ import Sidebar from '../../src/components/Sidebar';
 import Head from 'next/head';
 import InfoBlock from '../../src/components/blocks/InfoBlock';
 import { Button } from '@material-ui/core';
+import { useState } from 'react';
 
+const token =
+	'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmY2NiZTVlZTliZTRiMWNiNDk0ZWU2MyIsImlhdCI6MTYxMTAzMDg3NCwiZXhwIjoxNjEzNjIyODc0fQ.cWJgfAc6aYFOB5_W1DOSPvvXVmdcXzNe8aFEz91aPU0';
 export const getServerSideProps = async ({ query }) => {
 	const id = query.id;
-	const token =
-		'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmY2NiZTVlZTliZTRiMWNiNDk0ZWU2MyIsImlhdCI6MTYxMTAzMDg3NCwiZXhwIjoxNjEzNjIyODc0fQ.cWJgfAc6aYFOB5_W1DOSPvvXVmdcXzNe8aFEz91aPU0';
 	const options = {
 		method: 'GET',
 		headers: {
@@ -35,6 +36,37 @@ export const getServerSideProps = async ({ query }) => {
 const SingleAssignment = ({ data }) => {
 	let router = useRouter();
 	const { id } = router.query;
+
+	const [submitting, setSubmitting] = useState(false);
+	const [response, setResponse] = useState('');
+	const deleteAssignment = async (e) => {
+		e.preventDefault();
+		setSubmitting(true);
+		const url = `http://localhost:5000/api/v1/assignments/${router.query.id}`;
+		const options = {
+			method: 'DELETE',
+			headers: {
+				'Content-Type': 'application/json',
+				authorization: `Bearer ${token}`,
+			},
+		};
+		try {
+			const res = await fetch(url, options);
+			const resJson = await res.json();
+			if (resJson.success === true) {
+				setSubmitting(false);
+			} else {
+				console.log(resJson.message);
+				setSubmitting(false);
+			}
+		} catch (e) {
+			console.log(e);
+			const message = `An error has occured: 50X`;
+			setSubmitting(false);
+		}
+		router.push('/assignments');
+	};
+
 	const dueDate = new Date(data.message.dueDate);
 	const formattedDate =
 		dueDate.getDate() +
@@ -112,7 +144,7 @@ const SingleAssignment = ({ data }) => {
 								</div>
 								<InfoBlock name={'Created At'} info={formattedCreatedAt} />
 							</div>
-							<div className='d-flex flex-column flex-md-row mx-4 mt-3'>
+							<div className='d-flex flex-column flex-md-row mx-3 mt-3'>
 								<Button
 									variant='outlined'
 									size='medium'
@@ -130,6 +162,32 @@ const SingleAssignment = ({ data }) => {
 									</Button>
 								</Link>
 							</div>
+							<div className='d-flex flex-column flex-md-row mx-3 mt-3'>
+								{submitting === true ? (
+									<>
+										<Button
+											variant='outlined'
+											size='medium'
+											className='mx-0 mx-md-1 w-100 outline-none bg-danger bg-gradient text-white'
+											disabled
+										>
+											Deleting Assignment
+										</Button>
+									</>
+								) : (
+									<>
+										<Button
+											variant='outlined'
+											size='medium'
+											className='mx-0 mx-md-1 w-100 outline-none bg-danger bg-gradient text-white'
+											onClick={deleteAssignment}
+										>
+											Delete Assignment
+										</Button>
+									</>
+								)}
+							</div>
+							{response && <p className='text-center'>{response}</p>}
 							<br />
 						</>
 					) : (

@@ -17,7 +17,6 @@ import {
 	SwipeableDrawer,
 	Typography,
 } from '@material-ui/core';
-import Image from 'next/image';
 import { KeyboardArrowDownRounded } from '@material-ui/icons';
 
 interface Props {
@@ -42,10 +41,11 @@ export default function ResponsiveDrawer(props: Props) {
 	const drawer = (
 		<div>
 			<div className={`${classes.toolbar} mx-auto d-flex`}>
-				<Image
-					height='91'
-					width='241'
+				<img
+					// height='91'
+					// width='241'
 					src='/images/logo.webp'
+					style={{ maxWidth: '100%' }}
 					alt='Conceptometry Logo'
 					className='d-flex mx-auto'
 				/>
