@@ -38,6 +38,14 @@ export const getServerSideProps = async ({ query }) => {
 const Lectures = ({ data }) => {
 	const router = useRouter();
 	const { page } = router.query;
+	let weekday = [];
+	weekday[0] = 'Monday';
+	weekday[1] = 'Tuesday';
+	weekday[2] = 'Wednesday';
+	weekday[3] = 'Thursday';
+	weekday[4] = 'Friday';
+	weekday[5] = 'Saturday';
+	weekday[6] = 'Sunday';
 	return (
 		<>
 			<Head>
@@ -52,7 +60,7 @@ const Lectures = ({ data }) => {
 								<LecturesList
 									key={a._id}
 									id={a.id}
-									date={a.eventTime}
+									date={`${weekday[a.day]} - ${a.time}`}
 									name={a.name}
 									style={false}
 								/>

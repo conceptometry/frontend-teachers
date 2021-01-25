@@ -5,6 +5,14 @@ import Link from 'next/link';
 import LecturesList from '../lists/LecturesList';
 
 const LecturesTab = ({ data }) => {
+	let weekday = [];
+	weekday[0] = 'Monday';
+	weekday[1] = 'Tuesday';
+	weekday[2] = 'Wednesday';
+	weekday[3] = 'Thursday';
+	weekday[4] = 'Friday';
+	weekday[5] = 'Saturday';
+	weekday[6] = 'Sunday';
 	return (
 		<>
 			{data.count === 0 ? (
@@ -20,7 +28,7 @@ const LecturesTab = ({ data }) => {
 								id={a.id}
 								name={a.name}
 								style={true}
-								date={a.eventTime}
+								date={`${weekday[a.day]} - ${a.time}`}
 							/>
 						))}
 					</List>

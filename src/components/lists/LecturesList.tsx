@@ -17,17 +17,6 @@ interface Props {
 }
 
 const LecturesList = ({ id, name, style, date }: Props) => {
-	let formattedDate;
-	let ISODate = new Date(date);
-	if (date) {
-		formattedDate =
-			ISODate.getDate() +
-			'/' +
-			(ISODate.getMonth() + 1) +
-			'/' +
-			ISODate.getFullYear();
-	}
-
 	return (
 		<>
 			<ListItem
@@ -39,7 +28,7 @@ const LecturesList = ({ id, name, style, date }: Props) => {
 						<Class />
 					</Avatar>
 				</ListItemAvatar>
-				<ListItemText primary={name} secondary={`Date - ${formattedDate}`} />
+				<ListItemText primary={name} secondary={`${date}`} />
 				<ListItemSecondaryAction>
 					<IconButton
 						edge='end'
