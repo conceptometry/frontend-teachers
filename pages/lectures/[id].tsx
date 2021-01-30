@@ -145,7 +145,12 @@ const singleLecture = ({ data }) => {
 												onClick={deleteLecture}
 												className='btn btn-danger bg-gradient btn-block w-100 mx-2'
 											>
-												Deleting Lecture
+												                  <span
+                    className="spinner-border spinner-border-sm my-auto mx-auto"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+											
 											</button>
 										</>
 									) : (

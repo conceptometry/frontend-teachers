@@ -3,6 +3,7 @@ import Head from 'next/head';
 import { Button } from '@material-ui/core';
 import Select from 'react-select';
 import { useEffect, useState } from 'react';
+
 const token =
 	'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmY2NiZTVlZTliZTRiMWNiNDk0ZWU2MyIsImlhdCI6MTYxMTAzMDg3NCwiZXhwIjoxNjEzNjIyODc0fQ.cWJgfAc6aYFOB5_W1DOSPvvXVmdcXzNe8aFEz91aPU0';
 
@@ -266,7 +267,11 @@ const addLecture = ({ data }) => {
 														disabled={true}
 														className='btn btn-light border border-primary bg-gradient btn-block outline-none'
 													>
-														Submitting
+													                  <span
+                    className="spinner-border spinner-border-sm my-auto mx-auto"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
 													</Button>
 												</>
 											) : (

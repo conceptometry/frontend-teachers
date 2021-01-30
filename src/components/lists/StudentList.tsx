@@ -7,6 +7,7 @@ import {
 	ListItemText,
 } from '@material-ui/core';
 import { NavigateNextRounded, PersonRounded } from '@material-ui/icons';
+import Link from 'next/link';
 import styles from '../Home/InfoTabs.module.css';
 
 interface Props {
@@ -30,16 +31,16 @@ const AssignmentList = ({ id, name, grade, style }: Props) => {
 				</ListItemAvatar>
 				<ListItemText
 					primary={name}
-					secondary={`Grade - ${JSON.stringify(grade)}`}
+					secondary={`Grade - ${grade}`}
 				/>
 				<ListItemSecondaryAction>
-					<IconButton
+					<Link href={`/students/${id}`}><IconButton
 						edge='end'
 						aria-label='view more'
 						className={styles.outlineNone}
 					>
 						<NavigateNextRounded />
-					</IconButton>
+					</IconButton></Link>
 				</ListItemSecondaryAction>
 			</ListItem>
 		</>

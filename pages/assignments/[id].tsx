@@ -174,8 +174,12 @@ const SingleAssignment = ({ data }) => {
 											size='medium'
 											className='mx-0 mx-md-1 w-100 outline-none bg-danger bg-gradient text-white'
 											disabled
-										>
-											Deleting Assignment
+										>                  <span
+                    className="spinner-border spinner-border-sm my-auto mx-auto"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+											
 										</Button>
 									</>
 								) : (

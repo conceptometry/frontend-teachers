@@ -64,8 +64,8 @@ const Assignments = ({ data }) => {
 						<List>
 							{data.message.map((a) => (
 								<AssignmentList
-									key={a.id}
-									id={a.id}
+									key={a._id}
+									id={a._id}
 									dueDate={a.dueDate}
 									name={a.name}
 									style={false}

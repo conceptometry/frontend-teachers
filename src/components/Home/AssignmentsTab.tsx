@@ -16,8 +16,8 @@ const AssignmentsTab = ({ data }) => {
 					<List dense={true} className={styles.listContainer}>
 						{data.message.map((a) => (
 							<AssignmentList
-								key={a.id}
-								id={a.id}
+								key={a._id}
+								id={a._id}
 								name={a.name}
 								dueDate={a.dueDate}
 								style={true}

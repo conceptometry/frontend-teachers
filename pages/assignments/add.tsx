@@ -211,7 +211,11 @@ const addAssignment = ({ data }) => {
 														disabled={true}
 														className='btn btn-light border border-primary bg-gradient btn-block outline-none'
 													>
-														Submitting
+														                  <span
+                    className="spinner-border spinner-border-sm my-auto mx-auto"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
 													</Button>
 												</>
 											) : (

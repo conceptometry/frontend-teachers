@@ -27,7 +27,7 @@ const LecturesTab = ({ data }) => {
 						{data.message.map((a) => (
 							<LecturesList
 								key={a._id}
-								id={a.id}
+								id={a._id}
 								name={a.name}
 								style={true}
 								date={`${weekday[a.day]} - ${a.time}`}

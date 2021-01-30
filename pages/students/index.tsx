@@ -3,7 +3,8 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Link from 'next/link';
 import StudentList from '../../src/components/lists/StudentList';
-import { List } from '@material-ui/core';
+import { AddRounded } from '@material-ui/icons';
+import { List, IconButton } from '@material-ui/core';
 
 export const getServerSideProps = async ({ query }) => {
 	const page = query.page;
@@ -44,6 +45,19 @@ const Students = ({ data }) => {
 				<title>Conceptometry | Students</title>
 			</Head>
 			<Sidebar>
+				                <Link href='/students/add'>
+							<div
+								className='addAssignment position-fixed'
+								style={{ top: 72, right: 10 }}
+							>
+								<IconButton
+									className='outline-none'
+									style={{ border: '1px solid #111' }}
+								>
+									<AddRounded className='outline-none' />
+								</IconButton>
+							</div>
+						</Link>
 				<h2 className='text-center my-2'>Students</h2>
 				{data.count === 0 ? (
 					<>
@@ -57,7 +71,7 @@ const Students = ({ data }) => {
 									{data.message.map((a) => (
 										<StudentList
 											key={a._id}
-											id={a.id}
+											id={a._id}
 											grade={a.grade}
 											name={a.name}
 											style={false}
