@@ -42,7 +42,7 @@ const SingleAssignment = ({ data }) => {
 	const deleteAssignment = async (e) => {
 		e.preventDefault();
 		setSubmitting(true);
-		const url = `http://localhost:5000/api/v1/assignments/${router.query.id}`;
+		const url = `${process.env.NEXT_PUBLIC_API_URI}/assignments/${router.query.id}`;
 		const options = {
 			method: 'DELETE',
 			headers: {
@@ -54,17 +54,21 @@ const SingleAssignment = ({ data }) => {
 			const res = await fetch(url, options);
 			const resJson = await res.json();
 			if (resJson.success === true) {
+				setResponse(resJson.message);
+				router.push('/assignments');
 				setSubmitting(false);
 			} else {
 				console.log(resJson.message);
+				setResponse(resJson.message);
 				setSubmitting(false);
 			}
 		} catch (e) {
 			console.log(e);
 			const message = `An error has occured: 50X`;
+			setResponse(message);
+
 			setSubmitting(false);
 		}
-		router.push('/assignments');
 	};
 
 	const dueDate = new Date(data.message.dueDate);
@@ -111,7 +115,7 @@ const SingleAssignment = ({ data }) => {
 							</div>
 							<div className='d-flex flex-lg-row flex-column mx-3 mt-lg-3'>
 								<div
-									className='w-100 border border-primary border-2 bg-infoblock p-3 m-auto mx-2 d-flex flex-column mt-lg-0 mt-3'
+									className='w-100 border border-primary border-2 bg-infoblock p-3 mx-md-2 d-flex flex-column mt-lg-0 mt-3'
 									style={{ borderRadius: 12, minHeight: 190 }}
 								>
 									<p className='mx-auto mt-3' style={{ fontSize: 18 }}>

@@ -80,7 +80,7 @@ const addAssignment = ({ data }) => {
 			setResponse('Please enter a valid value for the students');
 		} else {
 			setSubmitting(true);
-			const url = `http://localhost:5000/api/v1/assignments`;
+			const url = `${process.env.NEXT_PUBLIC_API_URI}/assignments`;
 			const options = {
 				method: 'POST',
 				headers: {
@@ -95,7 +95,7 @@ const addAssignment = ({ data }) => {
 				const resJson = await res.json();
 				if (resJson.success === true) {
 					setResponse(resJson.message);
-					setSelectedValue([]);			
+					setSelectedValue([]);
 					setName('');
 					setDueDate('');
 					setDescription('');

@@ -1,0 +1,9 @@
+.tabsRow {
+	max-width: calc(100vw - 240px);
+}
+
+@media (max-width: 600px) {
+	.tabsRow {
+		max-width: 100vw;
+	}
+}

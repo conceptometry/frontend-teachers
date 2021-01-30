@@ -3,13 +3,15 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Link from 'next/link';
 import LecturesList from '../../src/components/lists/LecturesList';
-import { List } from '@material-ui/core';
+import { IconButton, List } from '@material-ui/core';
+import { AddRounded } from '@material-ui/icons';
+import DayTabs from '../../src/components/Lectures/dayTabs';
 
 export const getServerSideProps = async ({ query }) => {
 	const page = query.page;
 	const token =
 		'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmY2NiZTVlZTliZTRiMWNiNDk0ZWU2MyIsImlhdCI6MTYxMTAzMDg3NCwiZXhwIjoxNjEzNjIyODc0fQ.cWJgfAc6aYFOB5_W1DOSPvvXVmdcXzNe8aFEz91aPU0';
-	const url = `${process.env.API_URI}/lectures?page=${page || 1}&limit=6`;
+	const url = `${process.env.API_URI}/lectures?page=${page || 1}&limit=30`;
 	const options = {
 		method: 'GET',
 		headers: {
@@ -39,13 +41,23 @@ const Lectures = ({ data }) => {
 	const router = useRouter();
 	const { page } = router.query;
 	let weekday = [];
-	weekday[0] = 'Monday';
-	weekday[1] = 'Tuesday';
-	weekday[2] = 'Wednesday';
-	weekday[3] = 'Thursday';
-	weekday[4] = 'Friday';
-	weekday[5] = 'Saturday';
-	weekday[6] = 'Sunday';
+	weekday[0] = 'Sunday';
+	weekday[1] = 'Monday';
+	weekday[2] = 'Tuesday';
+	weekday[3] = 'Wednesday';
+	weekday[4] = 'Thursday';
+	weekday[5] = 'Friday';
+	weekday[6] = 'Saturday';
+
+	const sundayData: any = data.message.filter((d) => d.day === 0);
+	const mondayData: any = data.message.filter((d) => d.day === 1);
+	const tuesdayData: any = data.message.filter((d) => d.day === 2);
+	const wednesdayData: any = data.message.filter((d) => d.day === 3);
+	const thursdayData: any = data.message.filter((d) => d.day === 4);
+	const fridayData: any = data.message.filter((d) => d.day === 5);
+	const saturdayData: any = data.message.filter((d) => d.day === 6);
+
+	console.log(mondayData);
 	return (
 		<>
 			<Head>
@@ -54,18 +66,20 @@ const Lectures = ({ data }) => {
 			<Sidebar>
 				{data.success === true ? (
 					<>
+						<Link href='/lectures/add'>
+							<div
+								className='addLecture position-fixed'
+								style={{ top: 68, right: 10 }}
+							>
+								<IconButton className='outline-none'>
+									<AddRounded className='outline-none' />
+								</IconButton>
+							</div>
+						</Link>
 						<h2 className='text-center my-2'>Lectures</h2>
-						<List>
-							{data.message.map((a) => (
-								<LecturesList
-									key={a._id}
-									id={a.id}
-									date={`${weekday[a.day]} - ${a.time}`}
-									name={a.name}
-									style={false}
-								/>
-							))}
-						</List>
+
+						<DayTabs data={data} />
+
 						<div className='d-flex mx-1'>
 							{+page > 1 && (
 								<Link href={`/lectures?page=${(+page || 1) - 1}`}>
