@@ -88,7 +88,7 @@ const SingleSubmission = ({ data }) => {
 	const markAssignment = async (data) => {
 		setSubmitting(true);
 		console.log(JSON.stringify(data));
-		const url = `http://localhost:5000/api/v1/submissions/${id}/mark`;
+		const url = `${process.env.NEXT_PUBLIC_API_URI}/submissions/${id}/mark`;
 		const options = {
 			method: 'PUT',
 			headers: {
