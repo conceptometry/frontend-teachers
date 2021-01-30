@@ -5,6 +5,7 @@ import '../styles/nprogress.css'; //styles of nprogress
 import 'bootstrap/dist/css/bootstrap.css';
 import Error from 'next/error';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useEffect } from 'react';
 
 //Binding events.
 NProgress.configure({ showSpinner: false, speed: 200 });

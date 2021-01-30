@@ -299,7 +299,11 @@ const SingleSubmission = ({ data }) => {
 															className='outline-none w-100 d-flex mx-auto btn btn-light border border-primary border-2'
 															disabled
 														>
-															Submitting
+															<span
+                    className="spinner-border spinner-border-sm my-auto mx-auto"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
 														</Button>
 													</>
 												) : (

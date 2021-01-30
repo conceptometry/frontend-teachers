@@ -119,17 +119,17 @@ const addLecture = ({ data }) => {
 	return (
 		<>
 			<Head>
-				<title>Conceptometry | Add Assignment</title>
+				<title>Conceptometry | Add Lecture</title>
 			</Head>
 			<Sidebar>
-				<h2 className='text-center mt-2'>Add Assignment</h2>
+				<h2 className='text-center mt-2'>Add Lecture</h2>
 				<>
 					{data.success === true ? (
 						<>
 							{data.count === 0 ? (
 								<>
 									<p className='m-3'>
-										You need to have atleast one student to make an assignment
+										You need to have atleast one student to make an lecture
 									</p>
 								</>
 							) : (

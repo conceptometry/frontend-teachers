@@ -64,8 +64,7 @@ const SingleAssignment = ({ data }) => {
 			}
 		} catch (e) {
 			console.log(e);
-			const message = `An error has occured: 50X`;
-			setResponse(message);
+			setResponse(e.message);
 
 			setSubmitting(false);
 		}
