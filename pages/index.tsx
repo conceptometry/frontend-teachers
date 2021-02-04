@@ -110,12 +110,6 @@ export default function Home({
 				lectureData.success === true ||
 				studentData.success === true ? (
 					<>
-						<div
-							className='bg-lightpurple px-3 py-2 text-black text-center'
-							style={{ fontSize: 16, fontWeight: 500 }}
-						>
-							Hi Kamaldeep, you have your next lecture on 15 Jan 2020
-						</div>
 						<HomeInfoTabs
 							lectureData={lectureData}
 							assignmentData={assignmentData}

@@ -16,8 +16,10 @@ import {
 	AppBar,
 	SwipeableDrawer,
 	Typography,
+	ListItemIcon,
 } from '@material-ui/core';
-import { KeyboardArrowDownRounded } from '@material-ui/icons';
+import { CachedRounded, KeyboardArrowDownRounded } from '@material-ui/icons';
+import { useRouter } from 'next/router';
 
 interface Props {
 	/**
@@ -33,6 +35,7 @@ export default function ResponsiveDrawer(props: Props) {
 	const classes = useDrawerStyles();
 	const theme = useTheme();
 	const [mobileOpen, setMobileOpen] = React.useState(false);
+	const router = useRouter();
 
 	const handleDrawerToggle = () => {
 		setMobileOpen(!mobileOpen);
@@ -92,6 +95,11 @@ export default function ResponsiveDrawer(props: Props) {
 						<ListItemText primary={'Profile'} />
 					</ListItem>
 				</Link>
+				<ListItem button key={'Reload Page'} onClick={() => router.reload()}>
+					<ListItemIcon>
+						<CachedRounded />
+					</ListItemIcon>
+				</ListItem>
 			</List>
 		</div>
 	);

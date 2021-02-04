@@ -3,6 +3,7 @@ import Head from 'next/head';
 import { Button } from '@material-ui/core';
 import Select from 'react-select';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 const token =
 	'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmY2NiZTVlZTliZTRiMWNiNDk0ZWU2MyIsImlhdCI6MTYxMTAzMDg3NCwiZXhwIjoxNjEzNjIyODc0fQ.cWJgfAc6aYFOB5_W1DOSPvvXVmdcXzNe8aFEz91aPU0';
 
@@ -72,6 +73,7 @@ const addAssignment = ({ data }) => {
 		});
 	}, []);
 
+	const router = useRouter();
 	const [submitting, setSubmitting] = useState(false);
 	const [response, setResponse] = useState('');
 	const submitForm = async (e) => {
@@ -96,10 +98,11 @@ const addAssignment = ({ data }) => {
 				if (resJson.success === true) {
 					setResponse(resJson.message);
 					setSelectedValue([]);
-					setName('');
-					setDueDate('');
-					setDescription('');
+					setName(' ');
+					setDueDate('0');
+					setDescription(' ');
 					setSubmitting(false);
+					router.push('/assignments');
 				} else {
 					console.log(resJson.message);
 					const message = `${resJson.message}`;
@@ -211,11 +214,11 @@ const addAssignment = ({ data }) => {
 														disabled={true}
 														className='btn btn-light border border-primary bg-gradient btn-block outline-none'
 													>
-														                  <span
-                    className="spinner-border spinner-border-sm my-auto mx-auto"
-                    role="status"
-                    aria-hidden="true"
-                  ></span>
+														<span
+															className='spinner-border spinner-border-sm my-auto mx-auto'
+															role='status'
+															aria-hidden='true'
+														></span>
 													</Button>
 												</>
 											) : (
