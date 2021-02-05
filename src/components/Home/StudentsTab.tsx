@@ -26,7 +26,7 @@ const AssignmentsTab = ({ data }) => {
 					</List>
 
 					<div className='d-flex'>
-						<Link href='/page'>
+						<Link href='/students'>
 							<Button
 								variant='outlined'
 								style={{ marginLeft: 'auto', marginRight: 'auto' }}

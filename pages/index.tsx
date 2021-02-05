@@ -32,7 +32,7 @@ export const getServerSideProps = async (context) => {
 
 	// Fetch Lectures
 	const lectureRes = await fetch(
-		`${process.env.API_URI}/lectures?page=1&limit=4`,
+		`${process.env.API_URI}/lectures?page=1&limit=4&day=${new Date().getDay()}`,
 		{
 			method: 'GET',
 			headers: {

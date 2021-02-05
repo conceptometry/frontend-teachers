@@ -5,8 +5,6 @@ import Link from 'next/link';
 import LecturesList from '../lists/LecturesList';
 
 const LecturesTab = ({ data }) => {
-	console.log(new Date().getDay());
-
 	let weekday = [];
 	weekday[0] = 'Sunday';
 	weekday[1] = 'Monday';
@@ -19,7 +17,7 @@ const LecturesTab = ({ data }) => {
 		<>
 			{data.count === 0 ? (
 				<>
-					<p>You have made no lectures yet...</p>
+					<p>You have made no lectures for today...</p>
 				</>
 			) : (
 				<>
@@ -36,7 +34,7 @@ const LecturesTab = ({ data }) => {
 					</List>
 
 					<div className='d-flex'>
-						<Link href='/lectures/page/1'>
+						<Link href='/lectures'>
 							<Button
 								variant='outlined'
 								style={{ marginLeft: 'auto', marginRight: 'auto' }}

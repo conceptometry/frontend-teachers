@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import MenuIcon from '@material-ui/icons/Menu';
 import Link from 'next/link';
 import { useTheme } from '@material-ui/core/styles';
@@ -107,6 +107,8 @@ export default function ResponsiveDrawer(props: Props) {
 	const container =
 		window !== undefined ? () => window().document.body : undefined;
 
+	const [dropdownOpen, setDropdownOpen] = useState(false);
+
 	return (
 		<div className={classes.root}>
 			<CssBaseline />
@@ -134,8 +136,42 @@ export default function ResponsiveDrawer(props: Props) {
 							Conceptometry
 						</Typography>
 					</div>
-					<div style={{ fontSize: 16 }} className='d-none d-md-flex my-auto'>
-						Hello Kamaldeep <KeyboardArrowDownRounded />
+					<div
+						className='d-none d-md-flex flex-column'
+						onMouseOver={() => setDropdownOpen(true)}
+						onMouseOut={() => setDropdownOpen(false)}
+					>
+						<div style={{ fontSize: 16 }} className='d-none d-md-flex my-auto'>
+							Hello Kamaldeep <KeyboardArrowDownRounded />
+						</div>
+						<div
+							className={`bg-light bg-gradient border border-dark border-2 rounded text-black position-absolute ${
+								!dropdownOpen && `d-none`
+							}`}
+							style={{ marginTop: 25, transition: '0.5s ease' }}
+							onMouseOver={() => setDropdownOpen(true)}
+							onMouseOut={() => setDropdownOpen(false)}
+						>
+							<ul className='text-black-50 list-unstyled text-decoration-none py-2 mb-0'>
+								<hr />
+								<Link href='/students/add'>
+									<a>
+										<li className='text-black-50 px-2'>Add Student</li>
+									</a>
+								</Link>
+								<hr />
+								<Link href='/students'>
+									<a>
+										<li className='text-black-50 px-2'>View All Students</li>
+									</a>
+								</Link>
+								<hr />
+								<li className='text-black-50 px-2'>Edit Profile</li>
+								<hr />
+								<li className='text-black-50 px-2'>View Profile</li>
+								<hr />
+							</ul>
+						</div>
 					</div>
 				</Toolbar>
 			</AppBar>

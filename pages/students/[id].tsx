@@ -242,13 +242,21 @@ const singleStudent = ({ data }: Props) => {
 					<hr className='m-0 p-0' />
 
 					{data.message.profilePhoto !== 'no-photo.jpg' && (
-						<>
+						<div className='d-flex mx-auto'>
 							<img
 								src={data.message.profilePhoto}
 								alt={data.message.name}
-								className='my-3 mx-auto'
+								className='my-3 mx-auto d-flex rounded-full'
+								style={{
+									width: 200,
+									height: 200,
+									maxWidth: 200,
+									maxHeight: 200,
+									borderRadius: '50%',
+									objectFit: 'contain',
+								}}
 							/>
-						</>
+						</div>
 					)}
 
 					<form

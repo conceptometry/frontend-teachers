@@ -3,23 +3,24 @@
 }
 
 .muiBtnBlue {
-	-webkit-transition: all 500ms ease;
-	-ms-transition: all 500ms ease;
-	transition: all 500ms ease;
-	-o-transition: all 0.2s linear;
+	transition: all 500ms ease !important;
 	outline: none !important;
 	border: none !important;
 	border-radius: 7px !important;
 	box-shadow: 2px 2px 7px rgba(0, 0, 0, 0.25) !important;
-	background: #fff;
+	background-image: linear-gradient(to left, #2400ff, #cf2da2);
+	color: #fefefe !important;
+	transform: scale(1) !important;
 }
 
 .muiBtnBlue:hover {
-	-webkit-transition: all 500ms ease;
-	-ms-transition: all 500ms ease;
-	transition: all 500ms ease;
-	color: #fefefe;
-	background: linear-gradient(110deg, #2400ff, #cf2da2);
+	transition: all 500ms ease !important;
+	transform: scale(1.089) !important;
+}
+
+.muiBtnBlue:focus {
+	transition: all 100ms ease !important;
+	transform: scale(0.9) !important;
 }
 
 .tabsRow {
