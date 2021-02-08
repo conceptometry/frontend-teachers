@@ -49,7 +49,9 @@ function MyApp({ Component, pageProps, router }: Props) {
         return <Error statusCode={500} title={"Internal server error"} />;
       }
     };
-    get();
+    if (cookies.token) {
+      get();
+    }
   }, []);
 
   if (pageProps.error) {

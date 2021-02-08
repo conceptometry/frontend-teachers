@@ -9,7 +9,11 @@ import { useStateValue } from "../src/context/StateProvider";
 
 export const getServerSideProps = async (ctx) => {
   const isLoggedIn = ctx.req.headers.cookie;
-  if (!isLoggedIn) {
+  if (
+    isLoggedIn === "token=null" ||
+    isLoggedIn === "token=undefined" ||
+    !isLoggedIn
+  ) {
     return {
       props: { assignmentData: false, lectureData: false, studentData: false },
     };

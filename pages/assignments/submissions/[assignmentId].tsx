@@ -8,7 +8,11 @@ import Sidebar from "../../../src/components/Sidebar";
 export const getServerSideProps = async (ctx) => {
   const assignmentId = ctx.query.assignmentId;
   const isLoggedIn = ctx.req.headers.cookie;
-  if (!isLoggedIn) {
+  if (
+    isLoggedIn === "token=null" ||
+    isLoggedIn === "token=undefined" ||
+    !isLoggedIn
+  ) {
     return { props: { data: false, assignmentData: false } };
   } else {
     const token = ctx.req.headers.cookie.split("=")[1];

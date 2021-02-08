@@ -11,7 +11,11 @@ import { useEffect } from "react";
 export const getServerSideProps = async (ctx) => {
   const page = ctx.query.page;
   const isLoggedIn = ctx.req.headers.cookie;
-  if (!isLoggedIn) {
+  if (
+    isLoggedIn === "token=null" ||
+    isLoggedIn === "token=undefined" ||
+    !isLoggedIn
+  ) {
     return { props: { data: false } };
   } else {
     const token = ctx.req.headers.cookie.split("=")[1];
