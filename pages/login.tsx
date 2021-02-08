@@ -6,8 +6,15 @@ import { useStateValue } from "../src/context/StateProvider";
 import { useCookies } from "react-cookie";
 
 const Login = () => {
-  const [{ token }, dispatch]: any = useStateValue();
   const router = useRouter();
+  const [cookies, setCookie] = useCookies(["token"]);
+  // useEffect(() => {
+  //   if (cookies.token && cookies.token !== null) {
+  //     router.push("/");
+  //   }
+  // }, [cookies.token]);
+
+  const [{ token }, dispatch]: any = useStateValue();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const formData = {
@@ -37,7 +44,6 @@ const Login = () => {
 
   const [submitting, setSubmitting] = useState(false);
   const [response, setResponse] = useState("");
-  const [cookies, setCookie] = useCookies(["token"]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

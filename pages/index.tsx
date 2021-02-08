@@ -4,8 +4,6 @@ import { useEffect } from "react";
 import HomeButtons from "../src/components/Home/Buttons";
 import HomeInfoTabs from "../src/components/Home/InfoTabs";
 import Sidebar from "../src/components/Sidebar";
-import callToken from "../src/context/callContext";
-import { useStateValue } from "../src/context/StateProvider";
 
 export const getServerSideProps = async (ctx) => {
   const isLoggedIn = ctx.req.headers.cookie;
