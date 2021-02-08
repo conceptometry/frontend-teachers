@@ -1,11 +1,10 @@
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import Sidebar from "../../src/components/Sidebar";
-
-const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmY2NiZTVlZTliZTRiMWNiNDk0ZWU2MyIsImlhdCI6MTYxMTAzMDg3NCwiZXhwIjoxNjEzNjIyODc0fQ.cWJgfAc6aYFOB5_W1DOSPvvXVmdcXzNe8aFEz91aPU0";
+import { useCookies } from "react-cookie";
 
 const addStudent = () => {
+  const [cookies] = useCookies(["token"]);
   useEffect(() => {
     var forms = document.querySelectorAll(".needs-validation");
 
@@ -42,7 +41,7 @@ const addStudent = () => {
       body: JSON.stringify(formData),
       headers: {
         "Content-Type": "application/json",
-        authorization: `Bearer ${token}`,
+        authorization: `Bearer ${cookies.token}`,
       },
     };
     try {
@@ -102,7 +101,7 @@ const addStudent = () => {
                   disabled
                   className="btn btn-primary btn-block bg-gradient col-12"
                 >
-                                   <span
+                  <span
                     className="spinner-border spinner-border-sm my-auto mx-auto"
                     role="status"
                     aria-hidden="true"
