@@ -187,7 +187,10 @@ export default function ResponsiveDrawer(props: Props) {
                     className="text-black-50 px-2"
                     onClick={() => {
                       router.push("/login");
-                      removeCookie("token", null);
+                      removeCookie("token", null, {
+                        path: "/",
+                        expires: new Date(),
+                      });
                     }}
                   >
                     Sign Out
