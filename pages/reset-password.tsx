@@ -73,9 +73,7 @@ const ResetPassword = () => {
           path: '/',
         });
         localStorage.setItem('user', JSON.stringify(resJson.user));
-        setTimeout(() => {
-          router.push('/');
-        }, 1000);
+
         setSubmitting(false);
       } else {
         console.log(resJson.message);
