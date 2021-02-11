@@ -10,7 +10,13 @@ import reducer, { initialState } from '../src/context/reducer';
 import { useCookies, CookiesProvider } from 'react-cookie';
 
 //Binding events.
-NProgress.configure({ showSpinner: false, speed: 200 });
+NProgress.configure({
+  showSpinner: false,
+  speed: 150,
+  trickleRate: 0.02,
+  trickleSpeed: 500,
+  easing: 'ease',
+});
 Router.events.on('routeChangeStart', () => NProgress.start());
 Router.events.on('routeChangeComplete', () => NProgress.done());
 Router.events.on('routeChangeError', () => NProgress.done());
