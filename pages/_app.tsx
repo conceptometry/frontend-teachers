@@ -1,20 +1,19 @@
-import "../styles/globals.css";
-import Router from "next/router";
-import NProgress from "nprogress"; //nprogress module
-import "../styles/nprogress.css"; //styles of nprogress
-import "bootstrap/dist/css/bootstrap.css";
-import Error from "next/error";
-import { AnimatePresence, motion } from "framer-motion";
-import { useEffect } from "react";
-import { StateProvider } from "../src/context/StateProvider";
-import reducer, { initialState } from "../src/context/reducer";
-import { useCookies, CookiesProvider } from "react-cookie";
+import '../styles/globals.css';
+import Router from 'next/router';
+import NProgress from 'nprogress'; //nprogress module
+import '../styles/nprogress.css'; //styles of nprogress
+import 'bootstrap/dist/css/bootstrap.css';
+import Error from 'next/error';
+import { useEffect } from 'react';
+import { StateProvider } from '../src/context/StateProvider';
+import reducer, { initialState } from '../src/context/reducer';
+import { useCookies, CookiesProvider } from 'react-cookie';
 
 //Binding events.
 NProgress.configure({ showSpinner: false, speed: 200 });
-Router.events.on("routeChangeStart", () => NProgress.start());
-Router.events.on("routeChangeComplete", () => NProgress.done());
-Router.events.on("routeChangeError", () => NProgress.done());
+Router.events.on('routeChangeStart', () => NProgress.start());
+Router.events.on('routeChangeComplete', () => NProgress.done());
+Router.events.on('routeChangeError', () => NProgress.done());
 
 interface Props {
   Component: any;
@@ -23,14 +22,14 @@ interface Props {
 }
 
 function MyApp({ Component, pageProps, router }: Props) {
-  const [cookies] = useCookies(["token"]);
+  const [cookies] = useCookies(['token']);
   useEffect(() => {
     const get = async () => {
       const url = `${process.env.NEXT_PUBLIC_API_URI}/users/me`;
       const options = {
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           authorization: `Bearer ${cookies.token}`,
         },
       };
@@ -39,14 +38,14 @@ function MyApp({ Component, pageProps, router }: Props) {
 
         const resJson = await res.json();
         if (resJson.success === true) {
-          localStorage.setItem("user", JSON.stringify(resJson.message));
+          localStorage.setItem('user', JSON.stringify(resJson.message));
         } else {
           console.log(resJson.message);
           return <Error statusCode={res.status} title={resJson.message} />;
         }
       } catch (e) {
         console.log(e);
-        return <Error statusCode={500} title={"Internal server error"} />;
+        return <Error statusCode={500} title={'Internal server error'} />;
       }
     };
     if (cookies.token) {
@@ -65,27 +64,7 @@ function MyApp({ Component, pageProps, router }: Props) {
   return (
     <CookiesProvider>
       <StateProvider reducer={reducer} initialState={initialState}>
-        <AnimatePresence>
-          <motion.div
-            key={router.route}
-            initial="pageInitial"
-            animate="pageAnimate"
-            exit="pageExit"
-            variants={{
-              pageIntitial: {
-                opacity: 0,
-              },
-              pageAnimate: {
-                opacity: 1,
-              },
-              pageExit: {
-                opacity: 0,
-              },
-            }}
-          >
-            <Component {...pageProps} />
-          </motion.div>
-        </AnimatePresence>
+        <Component {...pageProps} />
       </StateProvider>
     </CookiesProvider>
   );
