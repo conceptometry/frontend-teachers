@@ -62,7 +62,6 @@ const Login = () => {
 
       const resJson = await res.json();
       if (resJson.success === true) {
-        console.log(resJson);
         dispatch({
           type: 'SET_USER',
           user: resJson.user,

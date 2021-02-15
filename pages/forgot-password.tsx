@@ -58,7 +58,6 @@ const ForgotPassword = () => {
       const res = await fetch(url, options);
       const resJson = await res.json();
       if (resJson.success === true) {
-        console.log(resJson);
         setResponse(
           `${
             resJson.message === 'Email sent'

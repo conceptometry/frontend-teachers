@@ -94,7 +94,7 @@ const Profile = () => {
               <input
                 type='number'
                 name='phone'
-                id='nameField'
+                id='phoneField'
                 placeholder='Phone Number'
                 className='form-control w-100'
                 value={phone}
@@ -103,7 +103,7 @@ const Profile = () => {
                 minLength={10}
                 maxLength={10}
               />
-              <label htmlFor='nameField'>Phone Number</label>
+              <label htmlFor='phoneField'>Phone Number</label>
               <div className='invalid-feedback'>
                 Please provide a valid phone number
               </div>
@@ -119,7 +119,7 @@ const Profile = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
-              <label htmlFor='nameField'>Email</label>
+              <label htmlFor='emailField'>Email</label>
               <div className='invalid-feedback'>
                 Please provide a valid email
               </div>
@@ -139,14 +139,14 @@ const Profile = () => {
               <input
                 type='password'
                 name='oldPassword'
-                id='nameField'
+                id='oldPassword'
                 placeholder='Old Password'
                 className='form-control w-100'
                 value={oldPassword}
                 onChange={(e) => setOldPassword(e.target.value)}
                 required
               />
-              <label htmlFor='nameField'>Old Password</label>
+              <label htmlFor='oldPassword'>Old Password</label>
               <div className='invalid-feedback'>
                 Please provide a valid password
               </div>
@@ -155,14 +155,14 @@ const Profile = () => {
               <input
                 type='password'
                 name='newPassword'
-                id='nameField'
+                id='newPassword'
                 placeholder='New Password'
                 className='form-control w-100'
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 required
               />
-              <label htmlFor='nameField'>New Password</label>
+              <label htmlFor='newPassword'>New Password</label>
               <div className='invalid-feedback'>
                 Please provide a valid password
               </div>

@@ -1,26 +1,25 @@
-import Head from "next/head";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import Sidebar from "../../src/components/Sidebar";
-import { useCookies } from "react-cookie";
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import Sidebar from '../../src/components/Sidebar';
+import { useCookies } from 'react-cookie';
 
 export const getServerSideProps = async (ctx) => {
   const isLoggedIn = ctx.req.headers.cookie;
-  console.log(isLoggedIn);
   if (
-    isLoggedIn === "token=null" ||
-    isLoggedIn === "token=undefined" ||
+    isLoggedIn === 'token=null' ||
+    isLoggedIn === 'token=undefined' ||
     !isLoggedIn
   ) {
     return { props: { data: false } };
   } else {
-    const token = ctx.req.headers.cookie.split("=")[1];
+    const token = ctx.req.headers.cookie.split('=')[1];
     const id = ctx.query.id;
     const url = `${process.env.API_URI}/users/${id}`;
     const options = {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         authorization: `Bearer ${token}`,
       },
     };
@@ -50,40 +49,39 @@ const singleStudent = ({ data }: Props) => {
   const router = useRouter();
   useEffect(() => {
     if (!data || data === false) {
-      router.push("/login");
+      router.push('/login');
     }
   }, []);
-  console.log(data);
   useEffect(() => {
-    var forms = document.querySelectorAll(".needs-validation");
+    var forms = document.querySelectorAll('.needs-validation');
 
     // Loop over them and prevent submission
     Array.prototype.slice.call(forms).forEach(function (form) {
       form.addEventListener(
-        "submit",
+        'submit',
         function (event) {
           if (!form.checkValidity()) {
             event.preventDefault();
             event.stopPropagation();
           }
 
-          form.classList.add("was-validated");
+          form.classList.add('was-validated');
         },
         false
       );
     });
   }, []);
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [parentName, setParentName] = useState("");
-  const [parentEmail, setParentEmail] = useState("");
-  const [grade, setGrade] = useState("");
-  const [feePayed, setFeePayed] = useState("false");
-  const [isActive, setIsActive] = useState("true");
-  const [phone, setPhone] = useState("");
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [parentName, setParentName] = useState('');
+  const [parentEmail, setParentEmail] = useState('');
+  const [grade, setGrade] = useState('');
+  const [feePayed, setFeePayed] = useState('false');
+  const [isActive, setIsActive] = useState('true');
+  const [phone, setPhone] = useState('');
   const [submitting, setSubmitting] = useState(false);
-  const [response, setResponse] = useState("");
+  const [response, setResponse] = useState('');
 
   useEffect(() => {
     if (data) {
@@ -120,7 +118,7 @@ const singleStudent = ({ data }: Props) => {
   // prompt the user if they try and leave with unsaved changes
   useEffect(() => {
     const warningText =
-      "You have unsaved changes - are you sure you wish to leave this page?";
+      'You have unsaved changes - are you sure you wish to leave this page?';
     const handleWindowClose = (e: BeforeUnloadEvent) => {
       if (!unsavedChanges) return;
       e.preventDefault();
@@ -129,14 +127,14 @@ const singleStudent = ({ data }: Props) => {
     const handleBrowseAway = () => {
       if (!unsavedChanges) return;
       if (window.confirm(warningText)) return;
-      router.events.emit("routeChangeError");
-      throw "routeChange aborted.";
+      router.events.emit('routeChangeError');
+      throw 'routeChange aborted.';
     };
-    window.addEventListener("beforeunload", handleWindowClose);
-    router.events.on("routeChangeStart", handleBrowseAway);
+    window.addEventListener('beforeunload', handleWindowClose);
+    router.events.on('routeChangeStart', handleBrowseAway);
     return () => {
-      window.removeEventListener("beforeunload", handleWindowClose);
-      router.events.off("routeChangeStart", handleBrowseAway);
+      window.removeEventListener('beforeunload', handleWindowClose);
+      router.events.off('routeChangeStart', handleBrowseAway);
     };
   }, [unsavedChanges]);
 
@@ -152,17 +150,17 @@ const singleStudent = ({ data }: Props) => {
     parentsName: parentName,
   };
 
-  const [cookies] = useCookies(["token"]);
+  const [cookies] = useCookies(['token']);
 
   const submitForm = async (e) => {
     e.preventDefault();
     setSubmitting(true);
     const url = `${process.env.NEXT_PUBLIC_API_URI}/users/${id}`;
     const options = {
-      method: "PUT",
+      method: 'PUT',
       body: JSON.stringify(formData),
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         authorization: `Bearer ${cookies.token}`,
       },
     };
@@ -191,183 +189,183 @@ const singleStudent = ({ data }: Props) => {
   return (
     <>
       <Head>
-        <title>Conceptometry | {data ? data.message.name : "Student"}</title>
+        <title>Conceptometry | {data ? data.message.name : 'Student'}</title>
       </Head>
       <Sidebar>
         {data && data.success === true && (
           <>
-            <div className="container m-0 p-0">
-              <div className="mx-3 py-2 my-auto d-flex justify-content-between">
-                <h3 className="text-capitalize my-auto">{name}</h3>
-                <p className="text-capitalize my-auto">Grade - {grade}</p>
+            <div className='container m-0 p-0'>
+              <div className='mx-3 py-2 my-auto d-flex justify-content-between'>
+                <h3 className='text-capitalize my-auto'>{name}</h3>
+                <p className='text-capitalize my-auto'>Grade - {grade}</p>
               </div>
-              <hr className="m-0 p-0" />
+              <hr className='m-0 p-0' />
 
-              {data.message.profilePhoto !== "no-photo.jpg" && (
-                <div className="d-flex mx-auto">
+              {data.message.profilePhoto !== 'no-photo.jpg' && (
+                <div className='d-flex mx-auto'>
                   <img
                     src={data.message.profilePhoto}
                     alt={data.message.name}
-                    className="my-3 mx-auto d-flex rounded-full"
+                    className='my-3 mx-auto d-flex rounded-full'
                     style={{
                       width: 200,
                       height: 200,
                       maxWidth: 200,
                       maxHeight: 200,
-                      borderRadius: "50%",
-                      objectFit: "contain",
+                      borderRadius: '50%',
+                      objectFit: 'contain',
                     }}
                   />
                 </div>
               )}
 
               <form
-                className="mx-3 py-2 needs-validation"
+                className='mx-3 py-2 needs-validation'
                 noValidate
                 onSubmit={submitForm}
               >
-                <div className="my-3 form-floating">
+                <div className='my-3 form-floating'>
                   <input
-                    type="text"
-                    name="name"
-                    placeholder="Student Name"
-                    className="form-control w-100"
+                    type='text'
+                    name='name'
+                    placeholder='Student Name'
+                    className='form-control w-100'
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     required
                   />
-                  <label htmlFor="nameField">Student Name</label>
-                  <div className="invalid-feedback">Please provide a name</div>
+                  <label htmlFor='nameField'>Student Name</label>
+                  <div className='invalid-feedback'>Please provide a name</div>
                 </div>
-                <div className="my-3 form-floating">
+                <div className='my-3 form-floating'>
                   <input
-                    type="email"
-                    name="email"
-                    placeholder="Student Email"
-                    className="form-control w-100"
+                    type='email'
+                    name='email'
+                    placeholder='Student Email'
+                    className='form-control w-100'
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
                   />
-                  <label htmlFor="nameField">Student Email</label>
-                  <div className="invalid-feedback">
+                  <label htmlFor='nameField'>Student Email</label>
+                  <div className='invalid-feedback'>
                     Please provide a valid email
                   </div>
                 </div>
-                <div className="my-3 form-floating">
+                <div className='my-3 form-floating'>
                   <input
-                    type="text"
-                    name="name"
-                    placeholder="Parent Name"
-                    className="form-control w-100"
+                    type='text'
+                    name='name'
+                    placeholder='Parent Name'
+                    className='form-control w-100'
                     value={parentName}
                     onChange={(e) => setParentName(e.target.value)}
                     required
                   />
-                  <label htmlFor="nameField">Parent Name</label>
-                  <div className="invalid-feedback">Please provide a name</div>
+                  <label htmlFor='nameField'>Parent Name</label>
+                  <div className='invalid-feedback'>Please provide a name</div>
                 </div>
-                <div className="my-3 form-floating">
+                <div className='my-3 form-floating'>
                   <input
-                    type="email"
-                    name="paremtEmail"
+                    type='email'
+                    name='paremtEmail'
                     placeholder="Parent's Email"
-                    className="form-control w-100"
+                    className='form-control w-100'
                     value={parentEmail}
                     onChange={(e) => setParentEmail(e.target.value)}
                     required
                   />
-                  <label htmlFor="nameField">Parent's Email</label>
-                  <div className="invalid-feedback">
+                  <label htmlFor='nameField'>Parent's Email</label>
+                  <div className='invalid-feedback'>
                     Please provide a valid email
                   </div>
                 </div>
-                <div className="row">
-                  <div className="col-md-6">
-                    <div className="form-floating">
+                <div className='row'>
+                  <div className='col-md-6'>
+                    <div className='form-floating'>
                       <select
-                        className="form-select"
-                        id="floatingSelect"
-                        aria-label="Floating label select example"
+                        className='form-select'
+                        id='floatingSelect'
+                        aria-label='Floating label select example'
                         value={grade}
                         onChange={(e) => setGrade(e.target.value)}
                         required
                       >
                         <option selected>Grade</option>
-                        <option value={"Nursery"}>Nursery</option>
-                        <option value={"KG"}>Kinder Garden</option>
-                        <option value={"1"}>Class 1</option>
-                        <option value={"2"}>Class 2</option>
-                        <option value={"3"}>Class 3</option>
-                        <option value={"4"}>Class 4</option>
-                        <option value={"5"}>Class 5</option>
-                        <option value={"6"}>Class 6</option>
-                        <option value={"7"}>Class 7</option>
-                        <option value={"8"}>Class 8</option>
-                        <option value={"9"}>Class 9</option>
-                        <option value={"10"}>Class 10</option>
+                        <option value={'Nursery'}>Nursery</option>
+                        <option value={'KG'}>Kinder Garden</option>
+                        <option value={'1'}>Class 1</option>
+                        <option value={'2'}>Class 2</option>
+                        <option value={'3'}>Class 3</option>
+                        <option value={'4'}>Class 4</option>
+                        <option value={'5'}>Class 5</option>
+                        <option value={'6'}>Class 6</option>
+                        <option value={'7'}>Class 7</option>
+                        <option value={'8'}>Class 8</option>
+                        <option value={'9'}>Class 9</option>
+                        <option value={'10'}>Class 10</option>
                       </select>
-                      <label htmlFor="floatingSelect">Grade</label>
-                      <div className="invalid-feedback">
+                      <label htmlFor='floatingSelect'>Grade</label>
+                      <div className='invalid-feedback'>
                         Please select a value
                       </div>
                     </div>
                   </div>
-                  <div className="col-md-6">
-                    <div className="form-floating">
+                  <div className='col-md-6'>
+                    <div className='form-floating'>
                       <input
-                        type="number"
-                        name="phone"
+                        type='number'
+                        name='phone'
                         placeholder="Parent's Phone"
-                        className="form-control w-100"
+                        className='form-control w-100'
                         minLength={10}
                         maxLength={10}
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         required
                       />
-                      <label htmlFor="nameField">Parent's Phone</label>
-                      <div className="invalid-feedback">
+                      <label htmlFor='nameField'>Parent's Phone</label>
+                      <div className='invalid-feedback'>
                         Please provide a valid phone number
                       </div>
                     </div>
                   </div>
                 </div>
-                <div className="row py-3">
-                  <div className="col-md-6">
-                    <div className="form-floating">
+                <div className='row py-3'>
+                  <div className='col-md-6'>
+                    <div className='form-floating'>
                       <select
-                        className="form-select"
-                        id="floatingSelect"
+                        className='form-select'
+                        id='floatingSelect'
                         value={isActive}
                         onChange={(e) => setIsActive(e.target.value)}
                         required
                       >
                         <option selected>Is Active</option>
-                        <option value={"true"}>Yes</option>
-                        <option value={"false"}>No</option>
+                        <option value={'true'}>Yes</option>
+                        <option value={'false'}>No</option>
                       </select>
-                      <label htmlFor="floatingSelect">Is Active</label>
-                      <div className="invalid-feedback">
+                      <label htmlFor='floatingSelect'>Is Active</label>
+                      <div className='invalid-feedback'>
                         Please select a value
                       </div>
                     </div>
                   </div>
-                  <div className="col-md-6">
-                    <div className="form-floating">
+                  <div className='col-md-6'>
+                    <div className='form-floating'>
                       <select
-                        className="form-select"
-                        id="floatingSelect"
+                        className='form-select'
+                        id='floatingSelect'
                         value={feePayed}
                         onChange={(e) => setFeePayed(e.target.value)}
                         required
                       >
                         <option selected>Is Active</option>
-                        <option value={"true"}>Yes</option>
-                        <option value={"false"}>No</option>
+                        <option value={'true'}>Yes</option>
+                        <option value={'false'}>No</option>
                       </select>
-                      <label htmlFor="floatingSelect">Fee Payed</label>
-                      <div className="invalid-feedback">
+                      <label htmlFor='floatingSelect'>Fee Payed</label>
+                      <div className='invalid-feedback'>
                         Please select a value
                       </div>
                     </div>
@@ -377,20 +375,20 @@ const singleStudent = ({ data }: Props) => {
                   <>
                     <button
                       disabled
-                      className="btn w-100 btn-block btn-primary bg-gradient"
+                      className='btn w-100 btn-block btn-primary bg-gradient'
                     >
                       <span
-                        className="spinner-border spinner-border-sm my-auto mx-auto"
-                        role="status"
-                        aria-hidden="true"
+                        className='spinner-border spinner-border-sm my-auto mx-auto'
+                        role='status'
+                        aria-hidden='true'
                       ></span>
                     </button>
                   </>
                 ) : (
                   <>
                     <button
-                      type="submit"
-                      className="btn w-100 btn-block btn-primary bg-gradient"
+                      type='submit'
+                      className='btn w-100 btn-block btn-primary bg-gradient'
                     >
                       Submit
                     </button>
@@ -398,7 +396,7 @@ const singleStudent = ({ data }: Props) => {
                 )}
               </form>
               {response && (
-                <p className="mx-auto py-1 text-center">{response}</p>
+                <p className='mx-auto py-1 text-center'>{response}</p>
               )}
             </div>
           </>

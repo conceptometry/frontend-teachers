@@ -48,7 +48,6 @@ const ResetPassword = () => {
     e.preventDefault();
     setSubmitting(true);
     const url = `${process.env.NEXT_PUBLIC_API_URI}/auth/resetpassword/${token}`;
-    console.log(url);
     const options = {
       method: 'PUT',
       headers: {
@@ -60,7 +59,6 @@ const ResetPassword = () => {
       const res = await fetch(url, options);
       const resJson = await res.json();
       if (resJson.success === true) {
-        console.log(resJson);
         setResponse(
           `${
             resJson.message === true
