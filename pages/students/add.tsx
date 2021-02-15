@@ -1,46 +1,53 @@
-import Head from "next/head";
-import { useEffect, useState } from "react";
-import Sidebar from "../../src/components/Sidebar";
-import { useCookies } from "react-cookie";
+import Head from 'next/head';
+import { useEffect, useState } from 'react';
+import Sidebar from '../../src/components/Sidebar';
+import { useCookies } from 'react-cookie';
+import { useRouter } from 'next/router';
 
 const addStudent = () => {
-  const [cookies] = useCookies(["token"]);
+  const router = useRouter();
+  const [cookies] = useCookies(['token']);
   useEffect(() => {
-    var forms = document.querySelectorAll(".needs-validation");
+    if (!cookies.token || cookies.token === null) {
+      router.push('/login');
+    }
+  }, []);
+  useEffect(() => {
+    var forms = document.querySelectorAll('.needs-validation');
 
     // Loop over them and prevent submission
     Array.prototype.slice.call(forms).forEach(function (form) {
       form.addEventListener(
-        "submit",
+        'submit',
         function (event) {
           if (!form.checkValidity()) {
             event.preventDefault();
             event.stopPropagation();
           }
 
-          form.classList.add("was-validated");
+          form.classList.add('was-validated');
         },
         false
       );
     });
   }, []);
 
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
 
   const formData = {
     email: email,
   };
   const [submitting, setSubmitting] = useState(false);
-  const [response, setResponse] = useState("");
+  const [response, setResponse] = useState('');
   const submitForm = async (e) => {
     e.preventDefault();
     setSubmitting(true);
     const url = `${process.env.NEXT_PUBLIC_API_URI}/auth/initiateuser`;
     const options = {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify(formData),
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         authorization: `Bearer ${cookies.token}`,
       },
     };
@@ -70,28 +77,28 @@ const addStudent = () => {
         <title>Conceptometry | Add Student</title>
       </Head>
       <Sidebar>
-        <div className="container m-0 p-0">
-          <div className="d-flex justify-content-between mx-3 my-auto py-3">
-            <h3 className="my-auto mx-auto">Add Student</h3>
+        <div className='container m-0 p-0'>
+          <div className='d-flex justify-content-between mx-3 my-auto py-3'>
+            <h3 className='my-auto mx-auto'>Add Student</h3>
           </div>
 
           <form
-            className="mx-3 needs-validation"
+            className='mx-3 needs-validation'
             onSubmit={submitForm}
             noValidate
           >
-            <div className="my-3 form-floating">
+            <div className='my-3 form-floating'>
               <input
-                type="email"
-                name="email"
-                placeholder="Student Email"
-                className="form-control w-100"
+                type='email'
+                name='email'
+                placeholder='Student Email'
+                className='form-control w-100'
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
-              <label htmlFor="nameField">Student Email</label>
-              <div className="invalid-feedback">
+              <label htmlFor='nameField'>Student Email</label>
+              <div className='invalid-feedback'>
                 Please provide a valid email
               </div>
             </div>
@@ -99,28 +106,28 @@ const addStudent = () => {
               <>
                 <button
                   disabled
-                  className="btn btn-primary btn-block bg-gradient col-12"
+                  className='btn btn-primary btn-block bg-gradient col-12'
                 >
                   <span
-                    className="spinner-border spinner-border-sm my-auto mx-auto"
-                    role="status"
-                    aria-hidden="true"
+                    className='spinner-border spinner-border-sm my-auto mx-auto'
+                    role='status'
+                    aria-hidden='true'
                   ></span>
                 </button>
               </>
             ) : (
               <>
-                {" "}
+                {' '}
                 <button
-                  type="submit"
-                  className="btn btn-primary btn-block bg-gradient col-12"
+                  type='submit'
+                  className='btn btn-primary btn-block bg-gradient col-12'
                 >
                   Submit
                 </button>
               </>
             )}
           </form>
-          {response && <p className="mx-2 my-1 text-center">{response}</p>}
+          {response && <p className='mx-2 my-1 text-center'>{response}</p>}
         </div>
       </Sidebar>
     </>

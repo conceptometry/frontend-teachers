@@ -8,7 +8,7 @@ const Profile = () => {
   const router = useRouter();
   const [cookies] = useCookies(['token']);
   useEffect(() => {
-    if (!cookies.token) {
+    if (!cookies.token || cookies.token === null) {
       router.push('/login');
     }
   }, []);
