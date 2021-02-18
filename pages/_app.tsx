@@ -14,7 +14,7 @@ NProgress.configure({
   showSpinner: false,
   speed: 150,
   trickleRate: 0.02,
-  trickleSpeed: 500,
+  trickleSpeed: 50,
   easing: 'ease',
 });
 Router.events.on('routeChangeStart', () => NProgress.start());

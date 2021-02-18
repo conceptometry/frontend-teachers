@@ -51,6 +51,54 @@ const Profile = () => {
       }
     }
   }, []);
+
+  // Update password
+  const [updatePasswordResponse, setUpdatePasswordResponse] = useState('');
+  const [updatePasswordSubmitting, setUpdatePasswordSubmitting] = useState(
+    false
+  );
+
+  const updatePasswordFormData = {
+    currentPassword: oldPassword,
+    newPassword: newPassword,
+  };
+
+  const submitUpdatePasswordForm = async (e) => {
+    e.preventDefault();
+
+    setUpdatePasswordSubmitting(true);
+    const url = `${process.env.NEXT_PUBLIC_API_URI}/users/me/password`;
+    const options = {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${cookies.token}`,
+      },
+      body: JSON.stringify(updatePasswordFormData),
+    };
+    try {
+      const res = await fetch(url, options);
+
+      const resJson = await res.json();
+      if (resJson.success === true) {
+        console.log(resJson);
+        if (resJson.message === true) {
+          setUpdatePasswordResponse('Your password has been updated');
+        }
+        setUpdatePasswordSubmitting(false);
+      } else {
+        console.log(resJson.message);
+        const message = `${resJson.message}`;
+        setUpdatePasswordResponse(message);
+        setUpdatePasswordSubmitting(false);
+      }
+    } catch (e) {
+      console.log(e);
+      const message = `An error has occured: 50X`;
+      setUpdatePasswordResponse(message);
+      setUpdatePasswordSubmitting(false);
+    }
+  };
   return (
     <>
       <Head>
@@ -131,7 +179,11 @@ const Profile = () => {
               Save
             </button>
           </form>
-          <form className='form-control needs-validation mt-3' noValidate>
+          <form
+            className='form-control needs-validation mt-3'
+            noValidate
+            onSubmit={submitUpdatePasswordForm}
+          >
             <p style={{ fontSize: 22 }} className='mx-auto text-center mt-2'>
               Update Password
             </p>
@@ -167,13 +219,30 @@ const Profile = () => {
                 Please provide a valid password
               </div>
             </div>
-
-            <button
-              type='submit'
-              className='btn btn-primary bg-gradient w-100 mb-2'
-            >
-              Update
-            </button>
+            {updatePasswordSubmitting === true ? (
+              <button
+                type='submit'
+                className='btn btn-primary bg-gradient w-100 mb-2'
+              >
+                <span
+                  className='spinner-border spinner-border-sm my-auto mx-auto'
+                  role='status'
+                  aria-hidden='true'
+                ></span>
+              </button>
+            ) : (
+              <button
+                type='submit'
+                className='btn btn-primary bg-gradient w-100 mb-2'
+              >
+                Update
+              </button>
+            )}
+            {updatePasswordResponse && (
+              <>
+                <p className='mt-1 text-center'>{updatePasswordResponse}</p>
+              </>
+            )}
           </form>
         </div>
       </Sidebar>
