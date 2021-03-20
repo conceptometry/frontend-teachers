@@ -1,12 +1,12 @@
-import '../styles/globals.css';
+import '../../styles/globals.css';
 import Router from 'next/router';
 import NProgress from 'nprogress'; //nprogress module
-import '../styles/nprogress.css'; //styles of nprogress
+import '../../styles/nprogress.css'; //styles of nprogress
 import 'bootstrap/dist/css/bootstrap.css';
 import Error from 'next/error';
-import { useEffect } from 'react';
-import { StateProvider } from '../src/context/StateProvider';
-import reducer, { initialState } from '../src/context/reducer';
+import React, { useEffect } from 'react';
+import { StateProvider } from '../context/StateProvider';
+import reducer, { initialState } from '../context/reducer';
 import { useCookies, CookiesProvider } from 'react-cookie';
 
 //Binding events.
@@ -14,7 +14,7 @@ NProgress.configure({
   showSpinner: false,
   speed: 150,
   trickleRate: 0.02,
-  trickleSpeed: 50,
+  trickleSpeed: 100,
   easing: 'ease',
 });
 Router.events.on('routeChangeStart', () => NProgress.start());
@@ -32,7 +32,10 @@ function MyApp({ Component, pageProps, router }: Props) {
   useEffect(() => {
     const get = async () => {
       const url = `${process.env.NEXT_PUBLIC_API_URI}/users/me`;
-      const options = {
+      const options: {
+        method: string;
+        headers: { 'Content-Type': string; authorization: string };
+      } = {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -46,11 +49,9 @@ function MyApp({ Component, pageProps, router }: Props) {
         if (resJson.success === true) {
           localStorage.setItem('user', JSON.stringify(resJson.message));
         } else {
-          console.log(resJson.message);
           return <Error statusCode={res.status} title={resJson.message} />;
         }
       } catch (e) {
-        console.log(e);
         return <Error statusCode={500} title={'Internal server error'} />;
       }
     };

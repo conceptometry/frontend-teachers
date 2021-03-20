@@ -1,22 +1,22 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import Sidebar from '../../src/components/Sidebar';
+import React, { useEffect, useState } from 'react';
+import Sidebar from '../../components/Sidebar';
 import { useCookies } from 'react-cookie';
+import { parseCookies } from '../../helpers/parseCookies';
 
 export const getServerSideProps = async (ctx) => {
-  const isLoggedIn = ctx.req.headers.cookie;
-  if (
-    isLoggedIn === 'token=null' ||
-    isLoggedIn === 'token=undefined' ||
-    !isLoggedIn
-  ) {
+  const isLoggedIn: string | undefined | null = parseCookies(ctx.req).token;
+  if (isLoggedIn === null || isLoggedIn === undefined || !isLoggedIn) {
     return { props: { data: false } };
   } else {
-    const token = ctx.req.headers.cookie.split('=')[1];
+    const token: string = parseCookies(ctx.req).token;
     const id = ctx.query.id;
     const url = `${process.env.API_URI}/users/${id}`;
-    const options = {
+    const options: {
+      method: string;
+      headers: { 'Content-Type': string; authorization: string };
+    } = {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -156,7 +156,11 @@ const singleStudent = ({ data }: Props) => {
     e.preventDefault();
     setSubmitting(true);
     const url = `${process.env.NEXT_PUBLIC_API_URI}/users/${id}`;
-    const options = {
+    const options: {
+      method: string;
+      headers: { 'Content-Type': string; authorization: string };
+      body: any;
+    } = {
       method: 'PUT',
       body: JSON.stringify(formData),
       headers: {
@@ -173,13 +177,11 @@ const singleStudent = ({ data }: Props) => {
         setUnsavedChanges(false);
         setSubmitting(false);
       } else {
-        console.log(resJson.message);
         const message = `${resJson.message}`;
         setResponse(message);
         setSubmitting(false);
       }
     } catch (e) {
-      console.log(e);
       const message = `An error has occured: 50X`;
       setResponse(message);
       setSubmitting(false);

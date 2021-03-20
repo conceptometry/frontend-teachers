@@ -1,30 +1,30 @@
-import Sidebar from "../../src/components/Sidebar";
-import { useRouter } from "next/router";
-import Head from "next/head";
-import Link from "next/link";
-import StudentList from "../../src/components/lists/StudentList";
-import { AddRounded } from "@material-ui/icons";
-import { List, IconButton } from "@material-ui/core";
-import { useEffect } from "react";
+import Sidebar from '../../components/Sidebar';
+import { useRouter } from 'next/router';
+import Head from 'next/head';
+import Link from 'next/link';
+import StudentList from '../../components/lists/StudentList';
+import { AddRounded } from '@material-ui/icons';
+import { List, IconButton } from '@material-ui/core';
+import React, { useEffect } from 'react';
+import { parseCookies } from '../../helpers/parseCookies';
 
 export const getServerSideProps = async (ctx) => {
   const page = ctx.query.page;
-  const isLoggedIn = ctx.req.headers.cookie;
-  if (
-    isLoggedIn === "token=null" ||
-    isLoggedIn === "token=undefined" ||
-    !isLoggedIn
-  ) {
+  const isLoggedIn: string | undefined | null = parseCookies(ctx.req).token;
+  if (isLoggedIn === null || isLoggedIn === undefined || !isLoggedIn) {
     return { props: { data: false } };
   } else {
-    const token = ctx.req.headers.cookie.split("=")[1];
+    const token: string = parseCookies(ctx.req).token;
     const url = `${process.env.API_URI}/users/student?page=${
       page || 1
     }&limit=6`;
-    const options = {
-      method: "GET",
+    const options: {
+      method: string;
+      headers: { 'Content-Type': string; authorization: string };
+    } = {
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         authorization: `Bearer ${token}`,
       },
     };
@@ -51,7 +51,7 @@ const Students = ({ data }) => {
   const router = useRouter();
   useEffect(() => {
     if (!data || data === false) {
-      router.push("/login");
+      router.push('/login');
     }
   }, []);
   const { page } = router.query;
@@ -61,23 +61,23 @@ const Students = ({ data }) => {
         <title>Conceptometry | Students</title>
       </Head>
       <Sidebar>
-        <Link href="/students/add">
+        <Link href='/students/add'>
           <div
-            className="addAssignment position-fixed"
+            className='addAssignment position-fixed'
             style={{ top: 72, right: 10 }}
           >
             <IconButton
-              className="outline-none"
-              style={{ border: "1px solid #111" }}
+              className='outline-none'
+              style={{ border: '1px solid #111' }}
             >
-              <AddRounded className="outline-none" />
+              <AddRounded className='outline-none' />
             </IconButton>
           </div>
         </Link>
-        <h2 className="text-center my-2">Students</h2>
+        <h2 className='text-center my-2'>Students</h2>
         {data.count === 0 ? (
           <>
-            <p className="m-3">You have no students yet...</p>
+            <p className='m-3'>You have no students yet...</p>
           </>
         ) : (
           <>
@@ -94,12 +94,12 @@ const Students = ({ data }) => {
                     />
                   ))}
                 </List>
-                <div className="d-flex mx-1">
+                <div className='d-flex mx-1'>
                   {+page > 1 && (
                     <Link href={`/students?page=${(+page || 1) - 1}`}>
                       <a
-                        className="btn btn-light border border-1 border-primary bg-gradient mx-1"
-                        style={{ width: "100%" }}
+                        className='btn btn-light border border-1 border-primary bg-gradient mx-1'
+                        style={{ width: '100%' }}
                       >
                         Previous Page
                       </a>
@@ -108,34 +108,34 @@ const Students = ({ data }) => {
                   {data.pages > (page || 1) && (
                     <Link href={`/students?page=${(+page || 1) + 1}`}>
                       <a
-                        className="btn btn-light border border-1 border-primary bg-gradient mx-1"
-                        style={{ width: "100%" }}
+                        className='btn btn-light border border-1 border-primary bg-gradient mx-1'
+                        style={{ width: '100%' }}
                       >
                         Next Page
                       </a>
                     </Link>
                   )}
                 </div>
-                <div className="d-flex mx-1 mt-1">
+                <div className='d-flex mx-1 mt-1'>
                   <button
-                    type="button"
-                    className="btn btn-light bg-gradient border border-primary mx-1 w-100 shadow-sm"
+                    type='button'
+                    className='btn btn-light bg-gradient border border-primary mx-1 w-100 shadow-sm'
                   >
-                    Total Pages{" "}
+                    Total Pages{' '}
                     <span
-                      className="badge bg-secondary"
+                      className='badge bg-secondary'
                       style={{ fontWeight: 500 }}
                     >
                       {data.pages || 0}
                     </span>
                   </button>
                   <button
-                    type="button"
-                    className="btn btn-light bg-gradient border border-primary mx-1 w-100 shadow-sm"
+                    type='button'
+                    className='btn btn-light bg-gradient border border-primary mx-1 w-100 shadow-sm'
                   >
-                    Current Page{" "}
+                    Current Page{' '}
                     <span
-                      className="badge bg-secondary"
+                      className='badge bg-secondary'
                       style={{ fontWeight: 500 }}
                     >
                       {page || 1}
@@ -144,7 +144,7 @@ const Students = ({ data }) => {
                 </div>
               </>
             ) : (
-              <p className="m-3">{data.message}</p>
+              <p className='m-3'>{data.message}</p>
             )}
           </>
         )}

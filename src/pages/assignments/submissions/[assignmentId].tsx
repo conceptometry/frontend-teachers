@@ -1,25 +1,25 @@
-import { List } from "@material-ui/core";
-import Head from "next/head";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
-import SubmissionList from "../../../src/components/lists/SubmissionList";
-import Sidebar from "../../../src/components/Sidebar";
+import { List } from '@material-ui/core';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+import React, { useEffect } from 'react';
+import SubmissionList from '../../../components/lists/SubmissionList';
+import Sidebar from '../../../components/Sidebar';
+import { parseCookies } from '../../../helpers/parseCookies';
 
 export const getServerSideProps = async (ctx) => {
   const assignmentId = ctx.query.assignmentId;
-  const isLoggedIn = ctx.req.headers.cookie;
-  if (
-    isLoggedIn === "token=null" ||
-    isLoggedIn === "token=undefined" ||
-    !isLoggedIn
-  ) {
+  const isLoggedIn: string | undefined | null = parseCookies(ctx.req).token;
+  if (isLoggedIn === null || isLoggedIn === undefined || !isLoggedIn) {
     return { props: { data: false, assignmentData: false } };
   } else {
-    const token = ctx.req.headers.cookie.split("=")[1];
-    const options = {
-      method: "GET",
+    const token: string = parseCookies(ctx.req).token;
+    const options: {
+      method: string;
+      headers: { 'Content-Type': string; authorization: string };
+    } = {
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         authorization: `Bearer ${token}`,
       },
     };
@@ -60,11 +60,17 @@ export const getServerSideProps = async (ctx) => {
   }
 };
 
-const ViewSubmissionsByAssignment = ({ data, assignmentData }) => {
+const ViewSubmissionsByAssignment = ({
+  data,
+  assignmentData,
+}: {
+  data: any;
+  assignmentData: any;
+}) => {
   const router = useRouter();
   useEffect(() => {
     if (data === false || assignmentData === false) {
-      router.push("/login");
+      router.push('/login');
     }
   }, []);
   return (
@@ -73,17 +79,17 @@ const ViewSubmissionsByAssignment = ({ data, assignmentData }) => {
         <title>Conceptometry | Assignment Submissions</title>
       </Head>
       <Sidebar>
-        <h2 className="mx-4 mt-3">{assignmentData.message.name}</h2>
-        <p className="mx-4" style={{ marginTop: "-12px" }}>
+        <h2 className='mx-4 mt-3'>{assignmentData.message.name}</h2>
+        <p className='mx-4' style={{ marginTop: '-12px' }}>
           Submissions
         </p>
         {data.count === 0 ? (
           <>
-            <p className="mx-4">Nobody has submitted the assignment...</p>
+            <p className='mx-4'>Nobody has submitted the assignment...</p>
           </>
         ) : (
           <>
-            <List dense={false} className="d-flex flex-column mx-4">
+            <List dense={false} className='d-flex flex-column mx-4'>
               {data.message.map((d) => (
                 <SubmissionList
                   key={d._id}

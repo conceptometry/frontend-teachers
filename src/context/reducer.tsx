@@ -5,7 +5,7 @@ export const initialState = {
 
 const reducer = (state, action): any => {
   switch (action.type) {
-    case "SET_USER":
+    case 'SET_USER':
       return {
         ...state,
         user: action.user,

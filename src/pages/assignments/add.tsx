@@ -1,26 +1,23 @@
-import Sidebar from "../../src/components/Sidebar";
-import Head from "next/head";
-import { Button } from "@material-ui/core";
-import Select from "react-select";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { useCookies } from "react-cookie";
+import Sidebar from '../../components/Sidebar';
+import Head from 'next/head';
+import { Button } from '@material-ui/core';
+import Select from 'react-select';
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import { useCookies } from 'react-cookie';
+import { parseCookies } from '../../helpers/parseCookies';
 
-export const getServerSideProps = async (ctx) => {
-  const isLoggedIn = ctx.req.headers.cookie;
-  if (
-    isLoggedIn === "token=null" ||
-    isLoggedIn === "token=undefined" ||
-    !isLoggedIn
-  ) {
+export const getServerSideProps = async (ctx: any) => {
+  const isLoggedIn: string | undefined | null = parseCookies(ctx.req).token;
+  if (isLoggedIn === null || isLoggedIn === undefined || !isLoggedIn) {
     return { props: { data: false } };
   } else {
-    const token = ctx.req.headers.cookie.split("=")[1];
-    const url = `${process.env.API_URI}/users/student`;
+    const token: string = parseCookies(ctx.req).token;
+    const url: string = `${process.env.API_URI}/users/student`;
     const options = {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         authorization: `Bearer ${token}`,
       },
     };
@@ -46,7 +43,7 @@ const addAssignment = ({ data }) => {
   const router = useRouter();
   useEffect(() => {
     if (!data || data === false) {
-      router.push("/login");
+      router.push('/login');
     }
   }, []);
 
@@ -61,9 +58,9 @@ const addAssignment = ({ data }) => {
   }
 
   const [selectedValue, setSelectedValue] = useState([]);
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [dueDate, setDueDate] = useState("");
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [dueDate, setDueDate] = useState('');
 
   const formData = {
     name,
@@ -73,19 +70,19 @@ const addAssignment = ({ data }) => {
   };
 
   useEffect(() => {
-    var forms = document.querySelectorAll(".needs-validation");
+    var forms = document.querySelectorAll('.needs-validation');
 
     // Loop over them and prevent submission
     Array.prototype.slice.call(forms).forEach(function (form) {
       form.addEventListener(
-        "submit",
+        'submit',
         function (event) {
           if (!form.checkValidity()) {
             event.preventDefault();
             event.stopPropagation();
           }
 
-          form.classList.add("was-validated");
+          form.classList.add('was-validated');
         },
         false
       );
@@ -93,19 +90,19 @@ const addAssignment = ({ data }) => {
   }, []);
 
   const [submitting, setSubmitting] = useState(false);
-  const [response, setResponse] = useState("");
-  const [cookies] = useCookies(["token"]);
+  const [response, setResponse] = useState('');
+  const [cookies] = useCookies(['token']);
   const submitForm = async (e) => {
     e.preventDefault();
     if (selectedValue.length === 0) {
-      setResponse("Please enter a valid value for the students");
+      setResponse('Please enter a valid value for the students');
     } else {
       setSubmitting(true);
       const url = `${process.env.NEXT_PUBLIC_API_URI}/assignments`;
       const options = {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           authorization: `Bearer ${cookies.token}`,
         },
         body: JSON.stringify(formData),
@@ -117,19 +114,17 @@ const addAssignment = ({ data }) => {
         if (resJson.success === true) {
           setResponse(resJson.message);
           setSelectedValue([]);
-          setName(" ");
-          setDueDate("0");
-          setDescription(" ");
+          setName(' ');
+          setDueDate('0');
+          setDescription(' ');
           setSubmitting(false);
-          router.push("/assignments");
+          router.push('/assignments');
         } else {
-          console.log(resJson.message);
           const message = `${resJson.message}`;
           setResponse(message);
           setSubmitting(false);
         }
       } catch (e) {
-        console.log(e);
         const message = `An error has occured: 50X`;
         setResponse(message);
         setSubmitting(false);
@@ -147,21 +142,21 @@ const addAssignment = ({ data }) => {
         <title>Conceptometry | Add Assignment</title>
       </Head>
       <Sidebar>
-        <h2 className="text-center mt-2">Add Assignment</h2>
+        <h2 className='text-center mt-2'>Add Assignment</h2>
         <>
           {data.success === true ? (
             <>
               {data.count === 0 ? (
                 <>
-                  <p className="m-3">
+                  <p className='m-3'>
                     You need to have atleast one student to make an assignment
                   </p>
                 </>
               ) : (
                 <>
-                  <div className="d-flex mx-3 flex-column">
+                  <div className='d-flex mx-3 flex-column'>
                     <form
-                      className="mx-auto w-100 d-flex flex-column needs-validation"
+                      className='mx-auto w-100 d-flex flex-column needs-validation'
                       onSubmit={submitForm}
                       noValidate={true}
                     >
@@ -175,55 +170,55 @@ const addAssignment = ({ data }) => {
                         required
                       />
 
-                      <div className="my-3 form-floating">
+                      <div className='my-3 form-floating'>
                         <input
-                          type="number"
-                          name="dueDate"
-                          id="dueDateField"
-                          placeholder="Time for Assignment (in days)"
-                          className="form-control w-100"
+                          type='number'
+                          name='dueDate'
+                          id='dueDateField'
+                          placeholder='Time for Assignment (in days)'
+                          className='form-control w-100'
                           value={dueDate}
                           onChange={(e) => setDueDate(e.target.value)}
                           required
                         />
-                        <label htmlFor="dueDateField">
+                        <label htmlFor='dueDateField'>
                           Time for Assignment (in days)
                         </label>
-                        <div className="invalid-feedback">
+                        <div className='invalid-feedback'>
                           Please provide a valid assignment time
                         </div>
                       </div>
-                      <div className="my-3 form-floating">
+                      <div className='my-3 form-floating'>
                         <input
-                          type="text"
-                          name="name"
-                          id="nameField"
-                          placeholder="Assignment Name"
-                          className="form-control w-100"
+                          type='text'
+                          name='name'
+                          id='nameField'
+                          placeholder='Assignment Name'
+                          className='form-control w-100'
                           value={name}
                           onChange={(e) => setName(e.target.value)}
                           required
                         />
-                        <label htmlFor="nameField">Assingment Name</label>
-                        <div className="invalid-feedback">
+                        <label htmlFor='nameField'>Assingment Name</label>
+                        <div className='invalid-feedback'>
                           Please provide a valid assignment name
                         </div>
                       </div>
-                      <div className="my-3 form-floating">
+                      <div className='my-3 form-floating'>
                         <textarea
-                          id="descriptionField"
-                          placeholder="Assignment Description"
-                          name="description"
-                          className="form-control w-100"
+                          id='descriptionField'
+                          placeholder='Assignment Description'
+                          name='description'
+                          className='form-control w-100'
                           rows={5}
                           value={description}
                           onChange={(e) => setDescription(e.target.value)}
                           required
                         />
-                        <label htmlFor="descriptionField">
+                        <label htmlFor='descriptionField'>
                           Assingment Description
                         </label>
-                        <div className="invalid-feedback">
+                        <div className='invalid-feedback'>
                           Please provide a valid assignment description
                         </div>
                       </div>
@@ -231,27 +226,27 @@ const addAssignment = ({ data }) => {
                         <>
                           <Button
                             disabled={true}
-                            className="btn btn-light border border-primary bg-gradient btn-block outline-none"
+                            className='btn btn-light border border-primary bg-gradient btn-block outline-none'
                           >
                             <span
-                              className="spinner-border spinner-border-sm my-auto mx-auto"
-                              role="status"
-                              aria-hidden="true"
+                              className='spinner-border spinner-border-sm my-auto mx-auto'
+                              role='status'
+                              aria-hidden='true'
                             ></span>
                           </Button>
                         </>
                       ) : (
                         <>
                           <Button
-                            type="submit"
-                            className="btn btn-light border border-primary bg-gradient btn-block outline-none"
+                            type='submit'
+                            className='btn btn-light border border-primary bg-gradient btn-block outline-none'
                           >
                             Submit
                           </Button>
                         </>
                       )}
                       {response && (
-                        <p className="mt-1 text-center">{response}</p>
+                        <p className='mt-1 text-center'>{response}</p>
                       )}
                     </form>
                   </div>

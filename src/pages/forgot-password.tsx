@@ -1,12 +1,11 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import { useStateValue } from '../src/context/StateProvider';
+import React, { useEffect, useState } from 'react';
+import { useStateValue } from '../context/StateProvider';
 
 import { useCookies } from 'react-cookie';
-import Link from 'next/link';
 
-const Login = () => {
+const ForgotPassword = () => {
   const router = useRouter();
   const [cookies, setCookie] = useCookies(['token']);
   useEffect(() => {
@@ -17,10 +16,8 @@ const Login = () => {
 
   const [{ token }, dispatch]: any = useStateValue();
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const formData = {
     email,
-    password,
   };
 
   useEffect(() => {
@@ -49,8 +46,12 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
-    const url = `${process.env.NEXT_PUBLIC_API_URI}/auth/login`;
-    const options = {
+    const url = `${process.env.NEXT_PUBLIC_API_URI}/auth/forgotpassword`;
+    const options: {
+      method: string;
+      headers: { 'Content-Type': string };
+      body: any;
+    } = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -59,38 +60,32 @@ const Login = () => {
     };
     try {
       const res = await fetch(url, options);
-
       const resJson = await res.json();
       if (resJson.success === true) {
-        dispatch({
-          type: 'SET_USER',
-          user: resJson.user,
-          token: resJson.token,
-        });
-        setResponse(`Logged In!`);
+        setResponse(
+          `${
+            resJson.message === 'Email sent'
+              ? 'An email has been sent to you with a link to reset your password'
+              : resJson.message
+          }`
+        );
         setSubmitting(false);
-        setCookie('token', `${resJson.token}`, {
-          path: '/',
-        });
-        localStorage.setItem('user', JSON.stringify(resJson.user));
-        router.push('/');
       } else {
-        console.log(resJson.message);
         const message = `${resJson.message}`;
         setResponse(message);
         setSubmitting(false);
       }
     } catch (e) {
-      console.log(e);
       const message = `An error has occured: 50X`;
       setResponse(message);
       setSubmitting(false);
     }
   };
+
   return (
     <>
       <Head>
-        <title>Conceptometry | Login</title>
+        <title>Conceptometry | Forgot Password</title>
       </Head>
       <div className='container'>
         <img
@@ -101,7 +96,7 @@ const Login = () => {
             maxWidth: 300,
           }}
         />
-        <h2 className='text-center'>Login</h2>
+        <h2 className='text-center'>Forgot Password</h2>
         <form
           className='mt-4 needs-validation'
           noValidate={true}
@@ -119,21 +114,6 @@ const Login = () => {
             />
             <label htmlFor='nameField'>Email</label>
             <div className='invalid-feedback'>Please provide a valid email</div>
-          </div>
-          <div className='my-3 form-floating'>
-            <input
-              type='password'
-              name='password'
-              placeholder='Password'
-              className='form-control w-100'
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            <label htmlFor='nameField'>Password</label>
-            <div className='invalid-feedback'>
-              Please provide a valid password
-            </div>
           </div>
           {submitting === true ? (
             <>
@@ -168,14 +148,9 @@ const Login = () => {
             <p className='text-center mt-1'>{response}</p>
           </>
         )}
-        <Link href='/forgot-password'>
-          <a className='mt-1'>
-            <p className='text-center'>Forgot your password? Click here</p>
-          </a>
-        </Link>
       </div>
     </>
   );
 };
 
-export default Login;
+export default ForgotPassword;

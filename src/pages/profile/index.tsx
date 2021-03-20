@@ -1,8 +1,8 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
-import Sidebar from '../../src/components/Sidebar';
+import Sidebar from '../../components/Sidebar';
 
 const Profile = () => {
   const router = useRouter();
@@ -68,7 +68,11 @@ const Profile = () => {
 
     setUpdatePasswordSubmitting(true);
     const url = `${process.env.NEXT_PUBLIC_API_URI}/users/me/password`;
-    const options = {
+    const options: {
+      method: string;
+      headers: { 'Content-Type': string; authorization: string };
+      body: any;
+    } = {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -81,19 +85,16 @@ const Profile = () => {
 
       const resJson = await res.json();
       if (resJson.success === true) {
-        console.log(resJson);
         if (resJson.message === true) {
           setUpdatePasswordResponse('Your password has been updated');
         }
         setUpdatePasswordSubmitting(false);
       } else {
-        console.log(resJson.message);
         const message = `${resJson.message}`;
         setUpdatePasswordResponse(message);
         setUpdatePasswordSubmitting(false);
       }
     } catch (e) {
-      console.log(e);
       const message = `An error has occured: 50X`;
       setUpdatePasswordResponse(message);
       setUpdatePasswordSubmitting(false);

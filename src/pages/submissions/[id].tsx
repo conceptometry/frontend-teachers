@@ -8,12 +8,13 @@ import {
 } from '@material-ui/core';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
-import InfoBlock from '../../src/components/blocks/InfoBlock';
-import Sidebar from '../../src/components/Sidebar';
+import InfoBlock from '../../components/blocks/InfoBlock';
+import Sidebar from '../../components/Sidebar';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { useCookies } from 'react-cookie';
+import { parseCookies } from '../../helpers/parseCookies';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -32,18 +33,17 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const getServerSideProps = async (ctx) => {
-  const isLoggedIn = ctx.req.headers.cookie;
-  if (
-    isLoggedIn === 'token=null' ||
-    isLoggedIn === 'token=undefined' ||
-    !isLoggedIn
-  ) {
+  const isLoggedIn: string | undefined | null = parseCookies(ctx.req).token;
+  if (isLoggedIn === null || isLoggedIn === undefined || !isLoggedIn) {
     return { props: { data: false } };
   } else {
-    const token = ctx.req.headers.cookie.split('=')[1];
+    const token: string = parseCookies(ctx.req).token;
     const id = ctx.query.id;
     const url = `${process.env.API_URI}/submissions/${id}`;
-    const options = {
+    const options: {
+      method: string;
+      headers: { 'Content-Type': string; authorization: string };
+    } = {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -103,7 +103,11 @@ const SingleSubmission = ({ data }) => {
   const markAssignment = async (data) => {
     setSubmitting(true);
     const url = `${process.env.NEXT_PUBLIC_API_URI}/submissions/${id}/mark`;
-    const options = {
+    const options: {
+      method: string;
+      headers: { 'Content-Type': string; authorization: string };
+      body: any;
+    } = {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -118,10 +122,8 @@ const SingleSubmission = ({ data }) => {
         const message = `An error has occured: ${res.status}`;
         setResponse(message);
         setSubmitting(false);
-        console.log(res);
       } else {
         const resJson = await res.json();
-        console.log(resJson);
         if (resJson.success === true) {
           setResponse(resJson.message);
           setSubmitting(false);
@@ -132,7 +134,6 @@ const SingleSubmission = ({ data }) => {
         }
       }
     } catch (e) {
-      console.log(e);
       const message = `An error has occured: 50X`;
       setResponse(message);
       setSubmitting(false);

@@ -1,11 +1,12 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useStateValue } from '../context/StateProvider';
 
 import { useCookies } from 'react-cookie';
-import { setTimeout } from 'timers';
+import Link from 'next/link';
 
-const ResetPassword = () => {
+const Login = () => {
   const router = useRouter();
   const [cookies, setCookie] = useCookies(['token']);
   useEffect(() => {
@@ -14,11 +15,12 @@ const ResetPassword = () => {
     }
   }, [cookies.token]);
 
-  const { token } = router.query;
-
+  const [{ token }, dispatch]: any = useStateValue();
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const formData = {
-    password: password,
+    email,
+    password,
   };
 
   useEffect(() => {
@@ -47,9 +49,13 @@ const ResetPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
-    const url = `${process.env.NEXT_PUBLIC_API_URI}/auth/resetpassword/${token}`;
-    const options = {
-      method: 'PUT',
+    const url = `${process.env.NEXT_PUBLIC_API_URI}/auth/login`;
+    const options: {
+      method: string;
+      headers: { 'Content-Type': string };
+      body: any;
+    } = {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -57,40 +63,47 @@ const ResetPassword = () => {
     };
     try {
       const res = await fetch(url, options);
-      const resJson = await res.json();
-      if (resJson.success === true) {
-        setResponse(
-          `${
-            resJson.message === true
-              ? `Your password has successfully been reset`
-              : resJson.message
-          }`
-        );
 
+      const resJson = await res.json();
+      if (resJson.success === true && resJson.user.role === 'teacher') {
+        dispatch({
+          type: 'SET_USER',
+          user: resJson.user,
+          token: resJson.token,
+        });
+        setResponse(`Logged In!`);
+        setSubmitting(false);
         setCookie('token', `${resJson.token}`, {
           path: '/',
+          secure: true,
+          maxAge: 3600 * 24 * 30,
+          sameSite: true,
         });
         localStorage.setItem('user', JSON.stringify(resJson.user));
-
+        router.push('/');
+      } else if (resJson.success === false) {
+        const message = `${resJson.message}`;
+        setResponse(message);
+        setSubmitting(false);
+      } else if (resJson.user.role !== 'teacher') {
+        const message = `Only teachers can access the dashboard`;
+        setResponse(message);
         setSubmitting(false);
       } else {
-        console.log(resJson.message);
         const message = `${resJson.message}`;
         setResponse(message);
         setSubmitting(false);
       }
     } catch (e) {
-      console.log(e);
       const message = `An error has occured: 50X`;
       setResponse(message);
       setSubmitting(false);
     }
   };
-
   return (
     <>
       <Head>
-        <title>Conceptometry | Reset Password</title>
+        <title>Conceptometry | Login</title>
       </Head>
       <div className='container'>
         <img
@@ -101,7 +114,7 @@ const ResetPassword = () => {
             maxWidth: 300,
           }}
         />
-        <h2 className='text-center'>Reset Password</h2>
+        <h2 className='text-center'>Login</h2>
         <form
           className='mt-4 needs-validation'
           noValidate={true}
@@ -109,18 +122,30 @@ const ResetPassword = () => {
         >
           <div className='my-3 form-floating'>
             <input
+              type='email'
+              name='email'
+              placeholder='Email'
+              className='form-control w-100'
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <label htmlFor='nameField'>Email</label>
+            <div className='invalid-feedback'>Please provide a valid email</div>
+          </div>
+          <div className='my-3 form-floating'>
+            <input
               type='password'
-              name='passsword'
+              name='password'
               placeholder='Password'
               className='form-control w-100'
               value={password}
-              minLength={6}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
             <label htmlFor='nameField'>Password</label>
             <div className='invalid-feedback'>
-              Please provide a valid password (minimum length 6)
+              Please provide a valid password
             </div>
           </div>
           {submitting === true ? (
@@ -156,9 +181,14 @@ const ResetPassword = () => {
             <p className='text-center mt-1'>{response}</p>
           </>
         )}
+        <Link href='/forgot-password'>
+          <a className='mt-1'>
+            <p className='text-center'>Forgot your password? Click here</p>
+          </a>
+        </Link>
       </div>
     </>
   );
 };
 
-export default ResetPassword;
+export default Login;

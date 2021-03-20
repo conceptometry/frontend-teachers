@@ -1,6 +1,6 @@
 import Head from 'next/head';
-import { useEffect, useState } from 'react';
-import Sidebar from '../../src/components/Sidebar';
+import React, { useEffect, useState } from 'react';
+import Sidebar from '../../components/Sidebar';
 import { useCookies } from 'react-cookie';
 import { useRouter } from 'next/router';
 
@@ -43,7 +43,11 @@ const addStudent = () => {
     e.preventDefault();
     setSubmitting(true);
     const url = `${process.env.NEXT_PUBLIC_API_URI}/auth/initiateuser`;
-    const options = {
+    const options: {
+      method: string;
+      headers: { 'Content-Type': string; authorization: string };
+      body: any;
+    } = {
       method: 'POST',
       body: JSON.stringify(formData),
       headers: {
@@ -59,13 +63,11 @@ const addStudent = () => {
         setResponse(resJson.message);
         setSubmitting(false);
       } else {
-        console.log(resJson.message);
         const message = `${resJson.message}`;
         setResponse(message);
         setSubmitting(false);
       }
     } catch (e) {
-      console.log(e);
       const message = `An error has occured: 50X`;
       setResponse(message);
       setSubmitting(false);
